@@ -2,12 +2,8 @@ package com.task.task.data.storage;
 
 public interface PreferenceRepository {
 
-    void setApiKey(String apyKey);
+    void setDataDownoladed();
 
-    String getApyKey();
-
-    void setUserId(long userId);
-
-    long getUserId();
+    boolean getDataDownloaded();
 
 }

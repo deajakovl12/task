@@ -1,8 +1,11 @@
 package com.task.task.injection.module;
 
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
+import com.task.task.data.storage.PreferenceRepository;
+import com.task.task.data.storage.database.DatabaseHelper;
 import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.scope.ForActivity;
+import com.task.task.manager.NetworkManager;
 import com.task.task.manager.StringManager;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomePresenterImpl;
@@ -32,7 +35,10 @@ public final class PresenterModule {
     @ForActivity
     @Provides
     SplashPresenter provideSplashPresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
-                                         @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, RestaurantsAPIConverter restaurantsAPIConverter, StringManager stringManager) {
-        return new SplashPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, restaurantsAPIConverter, stringManager);
+                                           @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler,
+                                           RestaurantUseCase restaurantUseCase, RestaurantsAPIConverter restaurantsAPIConverter,
+                                           NetworkManager networkManager, StringManager stringManager, PreferenceRepository preferenceRepository) {
+        return new SplashPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase,
+                restaurantsAPIConverter, networkManager, stringManager, preferenceRepository);
     }
 }

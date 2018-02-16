@@ -3,6 +3,8 @@ package com.task.task.ui.splash;
 
 import android.app.Activity;
 
+import com.task.task.ui.home.HomeActivity;
+
 public class SplashRouterImpl implements SplashRouter {
 
 
@@ -15,7 +17,7 @@ public class SplashRouterImpl implements SplashRouter {
 
 
     @Override
-    public void goToHomeScreen() {
-
+    public void goToHomeScreen(String infoAboutData) {
+        activity.startActivity(HomeActivity.createIntent(activity, infoAboutData));
     }
 }

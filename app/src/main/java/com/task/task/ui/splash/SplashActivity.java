@@ -1,15 +1,13 @@
 package com.task.task.ui.splash;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.task.task.R;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
-import com.task.task.ui.home.HomeActivity;
 
 import java.util.List;
 
@@ -22,13 +20,13 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Inject
     SplashPresenter presenter;
+    @Inject
+    SplashRouter router;
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -50,9 +48,9 @@ public class SplashActivity extends BaseActivity implements SplashView {
     }
 
     @Override
-    public void showData(List<RestaurantInfo> restaurantInfo) {
-        Timber.e(restaurantInfo.get(0).name);
-        new Handler().postDelayed(() -> startActivity(new Intent(SplashActivity.this, HomeActivity.class)),
+    public void dataLoaded(String infoAboutData) {
+        Timber.e("data here");
+        new Handler().postDelayed(() -> router.goToHomeScreen(infoAboutData),
                 getResources().getInteger(R.integer.splash_display_duration));
     }
 }

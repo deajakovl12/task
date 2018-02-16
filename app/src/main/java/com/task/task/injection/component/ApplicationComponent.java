@@ -1,9 +1,13 @@
 package com.task.task.injection.component;
 
+import android.net.ConnectivityManager;
+
 import com.task.task.application.TaskApplication;
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.data.service.NetworkService;
-import com.task.task.data.storage.TemplatePreferences;
+import com.task.task.data.storage.PreferenceRepository;
+import com.task.task.data.storage.TaskPreferences;
+import com.task.task.data.storage.database.DatabaseHelper;
 import com.task.task.device.ApplicationInformation;
 import com.task.task.device.DeviceInformation;
 import com.task.task.domain.usecase.RestaurantUseCase;
@@ -14,6 +18,7 @@ import com.task.task.injection.module.DeviceModule;
 import com.task.task.injection.module.ManagerModule;
 import com.task.task.injection.module.ThreadingModule;
 import com.task.task.injection.module.UseCaseModule;
+import com.task.task.manager.NetworkManager;
 import com.task.task.manager.StringManager;
 
 import javax.inject.Named;
@@ -64,6 +69,8 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     StringManager getStringManager();
 
+    ConnectivityManager getConnectivityManager();
+
     RestaurantUseCase getMovieUseCase();
 
     OkHttpClient getOkHttpClient();
@@ -74,7 +81,11 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     RestaurantsAPIConverter getMovieApiConverter();
 
-    TemplatePreferences getTemplatePreferences();
-
     NetworkService getNetworkService();
+
+    NetworkManager getNetworkManager();
+
+    DatabaseHelper getDatabaseHelper();
+
+    PreferenceRepository getPreferenceRepository();
 }

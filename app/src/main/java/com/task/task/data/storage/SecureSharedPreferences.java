@@ -41,9 +41,6 @@ public final class SecureSharedPreferences implements SharedPreferences {
         return new Editor();
     }
 
-    /**
-     * NOT SUPPORTED
-     */
 
     @Override
     public Map<String, ?> getAll() {
@@ -80,10 +77,6 @@ public final class SecureSharedPreferences implements SharedPreferences {
         return v != null ? decrypt(v) : defValue;
     }
 
-    /**
-     * NOT SUPPORTED
-     */
-
     @Nullable
     @Override
     public Set<String> getStringSet(final String key, final Set<String> defValues) {
@@ -105,11 +98,6 @@ public final class SecureSharedPreferences implements SharedPreferences {
         preferences.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
 
-    /**
-     * Encrypts value using PBE with MD5 and DES.
-     * @param value value to be encrypted.
-     * @return encrypted value.
-     */
     private String encrypt(final String value) {
         try {
             final byte[] bytes = value != null ? value.getBytes(UTF8) : new byte[0];
@@ -125,11 +113,6 @@ public final class SecureSharedPreferences implements SharedPreferences {
         }
     }
 
-    /**
-     * Decrypts encrypted value using PBE with MD5 and DES.
-     * @param value value to be decrypted.
-     * @return original value.
-     */
     private String decrypt(final String value) {
         try {
             final byte[] bytes = value != null ? Base64.decode(value, Base64.DEFAULT) : new byte[0];

@@ -60,7 +60,7 @@ public final class HomePresenterImpl extends BasePresenter implements HomePresen
     }
 
     private void onGetMovieInfoFailure(final Throwable throwable) {
-        Timber.e(stringManager.getString(R.string.fetch_movie_info_error), throwable);
+        Timber.e(stringManager.getString(R.string.fetch_restaurant_data), throwable);
     }
 
     private void onGetMovieInfoSuccess(final List<RestaurantInfo> restaurantInfo) {

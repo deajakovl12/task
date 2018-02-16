@@ -8,6 +8,8 @@ import com.task.task.injection.scope.ForActivity;
 import com.task.task.ui.base.activities.BaseActivity;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomeRouter;
+import com.task.task.ui.splash.SplashPresenter;
+import com.task.task.ui.splash.SplashRouter;
 
 import dagger.Component;
 
@@ -41,6 +43,10 @@ public interface ActivityComponent extends ActivityComponentActivityInjects, Act
     HomeRouter getHomeRouter();
 
     HomePresenter getHomePresenter();
+
+    SplashRouter getSplashRouter();
+
+    SplashPresenter getSplashPresenter();
 
 
 }
