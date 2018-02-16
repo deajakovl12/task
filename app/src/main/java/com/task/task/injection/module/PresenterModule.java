@@ -2,7 +2,6 @@ package com.task.task.injection.module;
 
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.data.storage.PreferenceRepository;
-import com.task.task.data.storage.database.DatabaseHelper;
 import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.scope.ForActivity;
 import com.task.task.manager.NetworkManager;
@@ -28,8 +27,8 @@ public final class PresenterModule {
     @ForActivity
     @Provides
     HomePresenter provideHomePresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
-                                       @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, RestaurantsAPIConverter restaurantsAPIConverter, StringManager stringManager) {
-        return new HomePresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, restaurantsAPIConverter, stringManager);
+                                       @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, StringManager stringManager) {
+        return new HomePresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager);
     }
 
     @ForActivity

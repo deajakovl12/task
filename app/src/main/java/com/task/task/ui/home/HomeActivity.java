@@ -102,14 +102,14 @@ public class HomeActivity extends BaseActivity implements HomeView {
     @Override
     protected void onResume() {
         super.onResume();
-        //presenter.setView(this);
-        //presenter.getMovieInfo();
+        presenter.setView(this);
+        presenter.getMovieInfo();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //presenter.dispose();
+        presenter.dispose();
     }
 
     @Override

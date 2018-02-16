@@ -15,4 +15,6 @@ public interface RestaurantUseCase {
 
     Observable<Boolean> addAllRestaurants(List<RestaurantInfo> listOfRestaurants);
 
+    Single<List<RestaurantInfo>> getLocalRestaurantData();
+
 }

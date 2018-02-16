@@ -1,6 +1,8 @@
 package com.task.task.domain.usecase;
 
 
+import android.database.sqlite.SQLiteDatabase;
+
 import com.task.task.data.api.models.response.RestaurantsApiResponse;
 import com.task.task.data.service.NetworkService;
 import com.task.task.data.storage.TaskPreferences;
@@ -38,4 +40,10 @@ public class RestaurantUseCaseImpl implements RestaurantUseCase {
         return Observable
                 .defer(() -> databaseHelper.addAllRestaurants(listOfRestaurants));
     }
+
+    @Override
+    public Single<List<RestaurantInfo>> getLocalRestaurantData() {
+        return Single.defer(() -> databaseHelper.getLocalRestaurantData());
+    }
+
 }

@@ -3,15 +3,19 @@ package com.task.task.data.storage.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
 import com.task.task.domain.model.RestaurantInfo;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Response;
 
 public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelper {
@@ -58,16 +62,45 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
                 }
                 db.setTransactionSuccessful();
 
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 return Observable.just(false);
-            }
-            finally {
+            } finally {
                 db.endTransaction();
             }
             return Observable.just(true);
         });
     }
 
+    @Override
+    public Single<List<RestaurantInfo>> getLocalRestaurantData() {
+        return Single.defer(() -> {
+            SQLiteDatabase db = getReadableDatabase();
 
+            String[] projection = {
+                    RestaurantContract.RestaurantEntry.RESTAURANT_ID,
+                    RestaurantContract.RestaurantEntry.RESTAURANT_NAME,
+                    RestaurantContract.RestaurantEntry.RESTAURANT_ADDRESS,
+                    RestaurantContract.RestaurantEntry.RESTAURANT_LONGITUDE,
+                    RestaurantContract.RestaurantEntry.RESTAURANT_LATITUDE,
+                    RestaurantContract.RestaurantEntry.RESTAURANT_URI
+            };
+            Cursor cursor;
+            cursor = db.query(
+                    RestaurantContract.RestaurantEntry.TABLE_NAME, projection, null, null, null, null, null);
+
+            List<RestaurantInfo> restaurantInfoList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                RestaurantInfo restaurantInfo = new RestaurantInfo(
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getFloat(3),
+                        cursor.getFloat(4),
+                        Uri.parse(cursor.getString(5)),
+                        cursor.getInt(0));
+                restaurantInfoList.add(restaurantInfo);
+            }
+            cursor.close();
+            return Single.just(restaurantInfoList);
+        });
+    }
 }
