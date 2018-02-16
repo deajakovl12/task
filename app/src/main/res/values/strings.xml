@@ -7,4 +7,7 @@
     <string name="data_loaded_from_db">Restaurant data loaded from local database</string>
     <string name="data_not_downloaded_no_internet">Data not downloaded, no internet connection</string>
 
+    <!-- Home Activity -->
+    <string name="home_activity_menu_google_map">Google map</string>
+
 </resources>
