@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.task.task.R;
-import com.task.task.domain.model.MovieInfo;
+import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
 
@@ -37,14 +37,14 @@ public class HomeActivity extends BaseActivity implements HomeView {
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.setView(this);
-        presenter.getMovieInfo();
+        //presenter.setView(this);
+        //presenter.getMovieInfo();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        presenter.dispose();
+        //presenter.dispose();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
     }
 
     @Override
-    public void showData(final List<MovieInfo> movieInfo) {
-        Toast.makeText(this, movieInfo.get(0).getTitle(), Toast.LENGTH_SHORT).show();
+    public void showData(final List<RestaurantInfo> restaurantInfo) {
+        Toast.makeText(this, restaurantInfo.get(1).name + restaurantInfo.get(1).id, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,11 +1,11 @@
-package com.task.task.ui.home;
+package com.task.task.ui.splash;
+
 
 import com.task.task.domain.model.RestaurantInfo;
 
 import java.util.List;
 
-
-public interface HomeView {
-
+public interface SplashView {
     void showData(List<RestaurantInfo> restaurantInfo);
+
 }

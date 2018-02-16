@@ -1,12 +1,12 @@
 package com.task.task.injection.component;
 
 import com.task.task.application.TaskApplication;
-import com.task.task.data.api.converter.MovieAPIConverter;
+import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.data.service.NetworkService;
 import com.task.task.data.storage.TemplatePreferences;
 import com.task.task.device.ApplicationInformation;
 import com.task.task.device.DeviceInformation;
-import com.task.task.domain.usecase.MovieUseCase;
+import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.module.ApiModule;
 import com.task.task.injection.module.ApplicationModule;
 import com.task.task.injection.module.DataModule;
@@ -64,7 +64,7 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     StringManager getStringManager();
 
-    MovieUseCase getMovieUseCase();
+    RestaurantUseCase getMovieUseCase();
 
     OkHttpClient getOkHttpClient();
 
@@ -72,7 +72,7 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     ApplicationInformation getApplicationInformation();
 
-    MovieAPIConverter getMovieApiConverter();
+    RestaurantsAPIConverter getMovieApiConverter();
 
     TemplatePreferences getTemplatePreferences();
 

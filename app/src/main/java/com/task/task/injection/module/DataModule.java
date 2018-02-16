@@ -15,7 +15,7 @@ import dagger.Provides;
 @Module
 public final class DataModule {
 
-    private static final String PREFS_NAME = "infinumSecureStorage";
+    private static final String PREFS_NAME = "taskSecureStorage";
 
     @Singleton
     @Provides

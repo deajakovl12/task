@@ -2,11 +2,11 @@ package com.task.task.injection.module;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.task.task.data.api.NetworkInterceptor;
-import com.task.task.data.api.converter.MovieAPIConverter;
-import com.task.task.data.api.converter.MovieAPIConverterImpl;
+import com.task.task.data.api.converter.RestaurantsAPIConverter;
+import com.task.task.data.api.converter.RestaurantsAPIConverterImpl;
 import com.task.task.data.service.NetworkService;
 import com.task.task.data.service.NetworkServiceImpl;
-import com.task.task.data.service.TemplateAPI;
+import com.task.task.data.service.TaskAPI;
 import com.task.task.device.ApplicationInformation;
 import com.task.task.device.DeviceInformation;
 
@@ -43,22 +43,22 @@ public final class ApiModule {
 
     @Provides
     @Singleton
-    NetworkService provideNetworkService(final TemplateAPI templateAPI) {
-        return new NetworkServiceImpl(templateAPI);
+    NetworkService provideNetworkService(final TaskAPI taskAPI) {
+        return new NetworkServiceImpl(taskAPI);
     }
 
 
     @Provides
     @Singleton
-    MovieAPIConverter providePersonAPIConverter() {
-        return new MovieAPIConverterImpl();
+    RestaurantsAPIConverter providePersonAPIConverter() {
+        return new RestaurantsAPIConverterImpl();
     }
 
 
     @Provides
     @Singleton
-    TemplateAPI provideInventoryAPI(final Retrofit retrofit) {
-        return retrofit.create(TemplateAPI.class);
+    TaskAPI provideInventoryAPI(final Retrofit retrofit) {
+        return retrofit.create(TaskAPI.class);
     }
 
 
