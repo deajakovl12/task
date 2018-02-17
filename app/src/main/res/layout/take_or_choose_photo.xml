@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/take_or_choose_photo_radio_group_padding">
 
         <RadioButton
             android:id="@+id/radio_take"
@@ -23,7 +23,7 @@
             android:id="@+id/radio_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/take_or_choose_photo_radio_button_margin_top"
             android:text="@string/add_photo_from_gallery" />
     </RadioGroup>
 

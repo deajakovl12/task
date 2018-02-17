@@ -13,18 +13,27 @@ public class Constants {
         String DATA_ERROR_DOWNLOADING = "data_error_downloading";
     }
 
-    public interface SnackBarConstants{
+    public interface SnackBarConstants {
         int ICON_SIZE = 24;
         int ICON_PADDING = 8;
     }
 
-    public interface RestaurantDetailsActivityConstants{
+    public interface RestaurantDetailsActivityConstants {
         String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
 
     }
 
-    public interface GalleryActivityConstants{
-        int STORAGE_PERMISSION_CODE = 41415;
+    public interface GalleryActivityConstants {
+        int OFFSET_TO_CENTER_IMAGE = -35;
+        int MOVE_TO_POSITION_TO_CENTER_SELECTED_IMAGE = 2;
+    }
 
+    public interface SelectedPhotoFragmentConstants {
+        String ARGUMENTS = "image_arguments";
+    }
+
+    public interface GalleryPhotoRecyclerViewAdapterConstants {
+        int FOCUSED_PHOTO = 1;
+        int NOT_FOCUSED_PHOTO = 2;
     }
 }

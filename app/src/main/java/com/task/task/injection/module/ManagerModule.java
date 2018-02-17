@@ -9,6 +9,7 @@ import com.task.task.manager.NetworkManagerImpl;
 import com.task.task.manager.StringManager;
 import com.task.task.manager.StringManagerImpl;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -18,6 +19,10 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 @Module
 public final class ManagerModule {
+
+    public static final String VERTICAL_LL_MANAGER = "vertical_ll_manager";
+
+    public static final String HORIZONTAL_LL_MANAGER = "horizontal_ll_manager";
 
     @Provides
     @Singleton
@@ -39,7 +44,15 @@ public final class ManagerModule {
 
     @Provides
     @Singleton
+    @Named(VERTICAL_LL_MANAGER)
     LinearLayoutManager provideLinearLayoutManager(final TaskApplication application) {
         return new LinearLayoutManager(application);
+    }
+
+    @Provides
+    @Singleton
+    @Named(HORIZONTAL_LL_MANAGER)
+    LinearLayoutManager provideLinearLayoutManagerHorizontal(final TaskApplication application) {
+        return new LinearLayoutManager(application, LinearLayoutManager.HORIZONTAL, false);
     }
 }

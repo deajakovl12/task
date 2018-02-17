@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- HOME ACTIVITY -->
+    <dimen name="home_fab_width">64dp</dimen>
+    <dimen name="home_fab_height">64dp</dimen>
+    <dimen name="home_fab_margin">16dp</dimen>
+
+    <!-- GALLERY ACTIVITY -->
+    <dimen name="gallery_pager_margin_top">60dp</dimen>
+    <dimen name="gallery_pager_height">0dp</dimen>
+    <dimen name="gallery_shadow_height">100dp</dimen>
+    <dimen name="gallery_toolbar_margin_top">16dp</dimen>
+    <dimen name="gallery_recycler_margin_bottom">24dp</dimen>
+    <dimen name="gallery_pager_margin_bottom">24dp</dimen>
+
+    <!-- RESTAURANT DETAILS ACTIVITY -->
+    <dimen name="details_image_height">264dp</dimen>
+    <dimen name="details_camera_image_width">64dp</dimen>
+    <dimen name="details_camera_image_height">64dp</dimen>
+    <dimen name="details_camera_image_margin_top">104dp</dimen>
+    <dimen name="details_linear_layout_padding">8dp</dimen>
+    <dimen name="details_text_input_layout_margin_top">16dp</dimen>
+    <dimen name="details_text_margin_start">6dp</dimen>
+    <dimen name="details_text_margin_top_4">4dp</dimen>
+    <dimen name="details_text_margin_top_8">8dp</dimen>
+
+    <!-- PHOTO FOCUSED ITEM -->
+
+    <dimen name="photo_focused_padding">2dp</dimen>
+    <dimen name="photo_focused_layout_out_width">105dp</dimen>
+    <dimen name="photo_focused_layout_out_height">105dp</dimen>
+    <dimen name="photo_focused_layout_in_width">100dp</dimen>
+    <dimen name="photo_focused_layout_in_height">100dp</dimen>
+    <dimen name="photo_focused_layout_transparet_widht">120dp</dimen>
+    <dimen name="photo_focused_transpared_height">120dp</dimen>
+    <dimen name="photo_focused_image_width">90dp</dimen>
+    <dimen name="photo_focused_image_height">90dp</dimen>
+
+    <!-- PHOTO NOT FOCUSED ITEM -->
+    <dimen name="photo_not_focused_padding_bot_top">15dp</dimen>
+    <dimen name="photo_not_focused_padding_left_right">2dp</dimen>
+    <dimen name="photo_not_focused_image_widht_height">90dp</dimen>
+
+    <!-- SELECTED PHOTO FRAGMENT -->
+    <dimen name="selected_photo_fragment_image_widht_height">64dp</dimen>
+
+    <!-- CUSTOM DIALOG TAKE OR CHOOSE PHOTO-->
+    <dimen name="take_or_choose_photo_radio_group_padding">16dp</dimen>
+    <dimen name="take_or_choose_photo_radio_button_margin_top">12dp</dimen>
+
+    <!-- RESTAURANT ITEM -->
+    <dimen name="restaurant_item_margin_bottom_top">8dp</dimen>
+    <dimen name="restaurant_item_margin_left_right">16dp</dimen>
+    <dimen name="restaurant_item_padding">12dp</dimen>
+    <dimen name="restaurant_item_icon_width_height">24dp</dimen>
+    <dimen name="restaurant_item_margin_top_8">8dp</dimen>
+    <dimen name="restaurant_item_text_width">0dp</dimen>
+    <dimen name="restaurant_item_text_height">24dp</dimen>
+    <dimen name="restaurant_item_margin_start">8dp</dimen>
+    <dimen name="restaurant_item_delete_icon_widht_height">36dp</dimen>
+    <dimen name="restaurant_item_delete_icon_margin_bottom">8dp</dimen>
+    <dimen name="restaurant_item_delete_icon_margin_end">4dp</dimen>
+    <dimen name="restaurant_item_delete_icon_margin_top">8dp</dimen>
+    <dimen name="restaurant_item_delete_icon_padding">6dp</dimen>
+    <dimen name="selected_photo_fragment_image_margin_bottom">230dp</dimen>
+</resources>

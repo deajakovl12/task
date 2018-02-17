@@ -1,38 +1,45 @@
 package com.task.task.ui.gallery;
 
-import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 import com.task.task.R;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.task.task.injection.module.ManagerModule.HORIZONTAL_LL_MANAGER;
+import static com.task.task.utils.Constants.GalleryActivityConstants.MOVE_TO_POSITION_TO_CENTER_SELECTED_IMAGE;
+import static com.task.task.utils.Constants.GalleryActivityConstants.OFFSET_TO_CENTER_IMAGE;
 
-public class GalleryActivity extends BaseActivity implements GalleryView, SelectedPhotoListener, SelectedPhotoFragment.SendPhotoInterface {
+
+public class GalleryActivity extends BaseActivity implements GalleryView, SelectedPhotoFragment.SendPhotoInterface, GalleryPhotoRecyclerViewAdapter.Listener {
 
     @Inject
     GalleryActivityPresenter presenter;
+
+    @Inject
+    @Named(HORIZONTAL_LL_MANAGER)
+    LinearLayoutManager layoutManager;
+
+    @Inject
+    GalleryPhotoRecyclerViewAdapter adapter;
 
     @BindView(R.id.take_or_pick_a_photo_activity_toolbar)
     protected Toolbar toolbar;
@@ -43,12 +50,7 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
     @BindView(R.id.image_view_pager)
     ViewPager imageViewPager;
 
-    private static final int OFFSET_TO_CENTER_IMAGE = -70;
-    private static final int MOVE_TO_POSITION_TO_CENTER_SELECTED_IMAGE = 2;
-    List<String> imageList = new ArrayList<>();
-    LinearLayoutManager layoutManager;
     int positionInList;
-    GalleryPhotoRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +61,7 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
     }
 
 
-
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager, List<String> imageList) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), imageList);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(positionInList);
@@ -104,21 +105,20 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
 
     @Override
     public void showImagesPath(final List<String> imageList) {
-        this.imageList = imageList;
-
         positionInList = 0;
-
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
         photoRecyclerView.setHasFixedSize(true);
         photoRecyclerView.setLayoutManager(layoutManager);
 
         checkPositionOffSelectedImage(positionInList);
-        adapter = new GalleryPhotoRecyclerViewAdapter(GalleryActivity.this, imageList, this, positionInList);
 
+        adapter.setContext(this);
+        adapter.setListener(this);
+        adapter.setData(imageList);
+        adapter.changePosition(positionInList);
         photoRecyclerView.setAdapter(adapter);
 
-        setupViewPager(imageViewPager);
+        setupViewPager(imageViewPager, imageList);
 
         imageViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -153,7 +153,19 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
     }
 
     @Override
-    public void onClicked(final int position) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onImageClicked(int position) {
         positionInList = position;
         imageViewPager.setCurrentItem(position);
     }

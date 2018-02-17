@@ -17,9 +17,14 @@
     <string name="restaurant_details_activity_menu_save">SAVE</string>
     <string name="take_photo">Take new photo</string>
     <string name="add_photo_from_gallery">Add photo from gallery</string>
+    <string name="details_restaurant_name">Restaurant name</string>
+    <string name="details_restaurant_address">Restaurant address</string>
+    <string name="details_longitude">Longitude</string>
+    <string name="details_latitude">Latitude</string>
 
     <!-- Gallery activity -->
     <string name="local_images_failure">Couldn\'t fetch local images</string>
     <string name="storage_permission_request">To access gallery photos enable this permission</string>
+    <string name="gallery_menu_use">USE</string>
 
 </resources>

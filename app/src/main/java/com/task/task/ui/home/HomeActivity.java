@@ -23,11 +23,13 @@ import com.task.task.ui.base.activities.BaseActivity;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.task.task.injection.module.ManagerModule.VERTICAL_LL_MANAGER;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_DOWNLOADED;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_ERROR_DOWNLOADING;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_INFO;
@@ -46,6 +48,7 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     StringManager stringManager;
 
     @Inject
+    @Named(VERTICAL_LL_MANAGER)
     LinearLayoutManager linearLayoutManager;
 
     @Inject
@@ -150,7 +153,7 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     }
 
     @OnClick(R.id.home_activity_fab)
-    public void fabClicked(){
+    public void fabClicked() {
         Toast.makeText(this, "FAB", Toast.LENGTH_SHORT).show();
     }
 

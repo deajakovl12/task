@@ -31,6 +31,8 @@ import dagger.Component;
 import io.reactivex.Scheduler;
 import okhttp3.OkHttpClient;
 
+import static com.task.task.injection.module.ManagerModule.HORIZONTAL_LL_MANAGER;
+import static com.task.task.injection.module.ManagerModule.VERTICAL_LL_MANAGER;
 import static com.task.task.injection.module.ThreadingModule.OBSERVE_SCHEDULER;
 import static com.task.task.injection.module.ThreadingModule.SUBSCRIBE_SCHEDULER;
 
@@ -91,7 +93,11 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     PreferenceRepository getPreferenceRepository();
 
+    @Named(VERTICAL_LL_MANAGER)
     LinearLayoutManager getLinearLayoutManager();
+
+    @Named(HORIZONTAL_LL_MANAGER)
+    LinearLayoutManager getLinearLayoutManagerHorizontal();
 
     LocalImagesUseCase getLocalImagesUseCase();
 }

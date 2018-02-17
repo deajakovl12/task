@@ -6,36 +6,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.task.task.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.task.task.utils.Constants.GalleryPhotoRecyclerViewAdapterConstants.FOCUSED_PHOTO;
+import static com.task.task.utils.Constants.GalleryPhotoRecyclerViewAdapterConstants.NOT_FOCUSED_PHOTO;
 
 public class GalleryPhotoRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int FOCUSED_PHOTO = 1;
-    private static final int NOT_FOCUSED_PHOTO = 2;
+    public interface Listener {
 
-    private List<String> photoList;
+        GalleryPhotoRecyclerViewAdapter.Listener EMPTY = (position) -> {
+        };
+
+        void onImageClicked(int position);
+    }
+
+    private List<String> photoList = new ArrayList<>();
     private Context context;
-    SelectedPhotoListener listener;
+    private GalleryPhotoRecyclerViewAdapter.Listener listener = GalleryPhotoRecyclerViewAdapter.Listener.EMPTY;
     int positionInList;
 
-    public GalleryPhotoRecyclerViewAdapter(Context context, List<String> photoList, SelectedPhotoListener listener, int positionInList) {
-        this.photoList = photoList;
-        this.context = context;
-        this.listener = listener;
-        this.positionInList = positionInList;
-    }
-
-    public void changePosition(int pos) {
-        this.positionInList = pos;
-    }
 
     @Override
     public int getItemViewType(int position) {
@@ -61,7 +60,6 @@ public class GalleryPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 holder = fpvh;
                 break;
         }
-
         return holder;
     }
 
@@ -79,23 +77,35 @@ public class GalleryPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         }
     }
 
+    public void setData(final List<String> data) {
+        if (data != null) {
+            photoList.addAll(data);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void changePosition(int pos) {
+        this.positionInList = pos;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void setListener(final GalleryPhotoRecyclerViewAdapter.Listener listener) {
+        this.listener = listener != null ? listener : GalleryPhotoRecyclerViewAdapter.Listener.EMPTY;
+    }
+
     private void showItemsFocusHolder(final FocusedPhotoViewHolder holder, int position) {
         Glide.with(context).load(photoList.get(position))
-             .placeholder(R.drawable.ic_alert_circle_outline).centerCrop()
-             .into(holder.libPhotoFocused);
-        holder.wholeLayout.setTag(position);
+                .placeholder(R.drawable.image_place_holder).centerCrop()
+                .into(holder.libPhotoFocused);
     }
 
     private void showItemsNotFocusHolder(final PhotoViewHolder holder, final int position) {
         Glide.with(context).load(photoList.get(position))
-             .placeholder(R.drawable.ic_alert_circle_outline).centerCrop()
-             .into(holder.libPhotoNotFocused);
-        holder.wholeLayout.setTag(position);
-        holder.wholeLayout.setOnClickListener(v -> {
-            final Integer clickedPicture = (Integer) holder.wholeLayout.getTag();
-            positionInList = clickedPicture;
-            listener.onClicked(clickedPicture);
-        });
+                .placeholder(R.drawable.image_place_holder).centerCrop()
+                .into(holder.libPhotoNotFocused);
     }
 
     @Override
@@ -108,9 +118,6 @@ public class GalleryPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         @BindView(R.id.lib_photo)
         ImageView libPhotoFocused;
 
-        @BindView(R.id.whole_layout)
-        RelativeLayout wholeLayout;
-
         public FocusedPhotoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -122,8 +129,12 @@ public class GalleryPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         @BindView(R.id.lib_photo)
         ImageView libPhotoNotFocused;
 
-        @BindView(R.id.whole_layout)
-        RelativeLayout wholeLayout;
+        @OnClick(R.id.whole_layout)
+        public void onImageClicked() {
+            positionInList = getAdapterPosition();
+            listener.onImageClicked(getAdapterPosition());
+
+        }
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
