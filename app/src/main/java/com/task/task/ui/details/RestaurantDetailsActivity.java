@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -29,14 +30,16 @@ import com.task.task.R;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
-import com.task.task.ui.gallery.GalleryActivity;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_CODE;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_EXTRA;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_DETAILS_INFO;
 
 public class RestaurantDetailsActivity extends BaseActivity implements RestaurantDetailsView {
@@ -44,6 +47,9 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
 
     @Inject
     RestaurantDetailsPresenter presenter;
+
+    @Inject
+    RestaurantDetailsRouter router;
 
     RestaurantInfo restaurantInfo;
 
@@ -120,6 +126,18 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         activityComponent.inject(this);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_GALLERY_IMAGE_CODE) {
+            if (resultCode == RESULT_OK) {
+                String result = data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA);
+                Glide.with(this).load(result).centerCrop().into(restaurantImage);
+
+            }
+        }
+    }
+
     @OnClick(R.id.activity_restaurant_details_camera)
     public void addOrChangeImage() {
         showAddProfilePhotoDialog();
@@ -158,15 +176,12 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        startActivity(new Intent(RestaurantDetailsActivity.this, GalleryActivity.class));
+                        router.openGallery();
                     }
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
-                        // check for permanent denial of permission
-                        Toast.makeText(RestaurantDetailsActivity.this, "Not graned", Toast.LENGTH_SHORT).show();
-                        if (response.isPermanentlyDenied()) {
-                        }
+                        Timber.e(getString(R.string.permission_not_granted));
                     }
 
                     @Override

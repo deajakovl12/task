@@ -41,7 +41,7 @@ public class SelectedPhotoFragment extends Fragment {
     }
 
     public interface SendPhotoInterface {
-        void saveThisPhoto();
+        void saveThisPhoto(String imageUri);
     }
 
     public static SelectedPhotoFragment newIstance(String imageUri) {
@@ -96,7 +96,7 @@ public class SelectedPhotoFragment extends Fragment {
 
     @OnClick(R.id.use_this_image)
     public void useThisImage() {
-        sendPhotoInterface.saveThisPhoto();
+        sendPhotoInterface.saveThisPhoto(data);
     }
 
     @Override

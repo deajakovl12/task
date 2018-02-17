@@ -1,13 +1,14 @@
 package com.task.task.ui.gallery;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import static com.task.task.injection.module.ManagerModule.HORIZONTAL_LL_MANAGER;
 import static com.task.task.utils.Constants.GalleryActivityConstants.MOVE_TO_POSITION_TO_CENTER_SELECTED_IMAGE;
 import static com.task.task.utils.Constants.GalleryActivityConstants.OFFSET_TO_CENTER_IMAGE;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_EXTRA;
 
 
 public class GalleryActivity extends BaseActivity implements GalleryView, SelectedPhotoFragment.SendPhotoInterface, GalleryPhotoRecyclerViewAdapter.Listener {
@@ -51,6 +53,10 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
     ViewPager imageViewPager;
 
     int positionInList;
+
+    public static Intent createIntent(final Context context) {
+        return new Intent(context, GalleryActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +87,11 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
     }
 
     @Override
-    public void saveThisPhoto() {
-        Toast.makeText(this, "saving", Toast.LENGTH_SHORT).show();
+    public void saveThisPhoto(String imageUri) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(PICK_GALLERY_IMAGE_EXTRA, imageUri);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
@@ -156,7 +165,7 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                finish();
                 break;
             default:
                 break;

@@ -26,5 +26,6 @@
     <string name="local_images_failure">Couldn\'t fetch local images</string>
     <string name="storage_permission_request">To access gallery photos enable this permission</string>
     <string name="gallery_menu_use">USE</string>
+    <string name="permission_not_granted">Not granted</string>
 
 </resources>

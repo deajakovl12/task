@@ -20,6 +20,8 @@ public class Constants {
 
     public interface RestaurantDetailsActivityConstants {
         String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
+        int PICK_GALLERY_IMAGE_CODE = 21414;
+        String PICK_GALLERY_IMAGE_EXTRA = "image_uri_extra";
 
     }
 

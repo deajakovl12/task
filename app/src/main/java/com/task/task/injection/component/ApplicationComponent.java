@@ -93,11 +93,5 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     PreferenceRepository getPreferenceRepository();
 
-    @Named(VERTICAL_LL_MANAGER)
-    LinearLayoutManager getLinearLayoutManager();
-
-    @Named(HORIZONTAL_LL_MANAGER)
-    LinearLayoutManager getLinearLayoutManagerHorizontal();
-
     LocalImagesUseCase getLocalImagesUseCase();
 }

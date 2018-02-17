@@ -41,18 +41,4 @@ public final class ManagerModule {
     NetworkManager provideNetworkManager(final ConnectivityManager connectivityManager) {
         return new NetworkManagerImpl(connectivityManager);
     }
-
-    @Provides
-    @Singleton
-    @Named(VERTICAL_LL_MANAGER)
-    LinearLayoutManager provideLinearLayoutManager(final TaskApplication application) {
-        return new LinearLayoutManager(application);
-    }
-
-    @Provides
-    @Singleton
-    @Named(HORIZONTAL_LL_MANAGER)
-    LinearLayoutManager provideLinearLayoutManagerHorizontal(final TaskApplication application) {
-        return new LinearLayoutManager(application, LinearLayoutManager.HORIZONTAL, false);
-    }
 }
