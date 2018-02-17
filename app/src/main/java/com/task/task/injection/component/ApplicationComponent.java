@@ -1,6 +1,7 @@
 package com.task.task.injection.component;
 
 import android.net.ConnectivityManager;
+import android.support.v7.widget.LinearLayoutManager;
 
 import com.task.task.application.TaskApplication;
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
@@ -71,7 +72,7 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     ConnectivityManager getConnectivityManager();
 
-    RestaurantUseCase getMovieUseCase();
+    RestaurantUseCase getRestaurantUseCase();
 
     OkHttpClient getOkHttpClient();
 
@@ -79,7 +80,7 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
 
     ApplicationInformation getApplicationInformation();
 
-    RestaurantsAPIConverter getMovieApiConverter();
+    RestaurantsAPIConverter getRestaurantApiConverter();
 
     NetworkService getNetworkService();
 
@@ -88,4 +89,6 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
     DatabaseHelper getDatabaseHelper();
 
     PreferenceRepository getPreferenceRepository();
+
+    LinearLayoutManager getLinearLayoutManager();
 }

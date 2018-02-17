@@ -4,12 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidadvance.topsnackbar.TSnackbar;
@@ -23,7 +24,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_DOWNLOADED;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_ERROR_DOWNLOADING;
@@ -34,13 +37,25 @@ import static com.task.task.utils.Constants.SnackBarConstants.ICON_PADDING;
 import static com.task.task.utils.Constants.SnackBarConstants.ICON_SIZE;
 
 
-public class HomeActivity extends BaseActivity implements HomeView {
+public class HomeActivity extends BaseActivity implements HomeView, HomeActivityRecyclerViewAdapter.Listener {
 
     @Inject
     HomePresenter presenter;
 
     @Inject
     StringManager stringManager;
+
+    @Inject
+    LinearLayoutManager linearLayoutManager;
+
+    @Inject
+    HomeActivityRecyclerViewAdapter homeActivityRecyclerViewAdapter;
+
+    @BindView(R.id.home_activity_recycler_view)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.home_activity_fab)
+    FloatingActionButton fab;
 
     private String infoAboutDownloading;
 
@@ -57,7 +72,31 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
         infoAboutDownloading = getIntent().getStringExtra(DATA_INFO);
         showUserInfoAboutData();
+        setUpToolbar();
+        setUpRecyclerView();
+        setUpFab();
 
+    }
+
+    private void setUpFab() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    fab.hide();
+                } else if (dy < 0) {
+                    fab.show();
+                }
+            }
+        });
+    }
+
+    private void setUpRecyclerView() {
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setMotionEventSplittingEnabled(false);
+        homeActivityRecyclerViewAdapter.setListener(this);
+        recyclerView.setAdapter(homeActivityRecyclerViewAdapter);
     }
 
     private void showUserInfoAboutData() {
@@ -91,7 +130,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     }
 
-    private void setUpSnackBar(int iconImage, String snackText, int backgroundColor){
+    private void setUpSnackBar(int iconImage, String snackText, int backgroundColor) {
         TSnackbar snackbar = TSnackbar
                 .make(findViewById(android.R.id.content), snackText, TSnackbar.LENGTH_LONG);
         snackbar.setActionTextColor(Color.WHITE);
@@ -99,6 +138,17 @@ public class HomeActivity extends BaseActivity implements HomeView {
         snackbar.setIconPadding(ICON_PADDING);
         snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, backgroundColor));
         snackbar.show();
+    }
+
+    private void setUpToolbar() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getString(R.string.home_activity_toolbar_title));
+        }
+    }
+
+    @OnClick(R.id.home_activity_fab)
+    public void fabClicked(){
+        Toast.makeText(this, "FAB", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -125,7 +175,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
     protected void onResume() {
         super.onResume();
         presenter.setView(this);
-        presenter.getMovieInfo();
+        presenter.getRestaurants();
     }
 
     @Override
@@ -141,6 +191,16 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     @Override
     public void showData(final List<RestaurantInfo> restaurantInfo) {
-        Toast.makeText(this, restaurantInfo.get(1).name + restaurantInfo.get(1).id, Toast.LENGTH_SHORT).show();
+        homeActivityRecyclerViewAdapter.setData(restaurantInfo);
+
+    }
+
+    @Override
+    public void onRestaurantClicked(RestaurantInfo restaurantInfo, int position, boolean deleteRestaurant) {
+        if (deleteRestaurant) {
+            Toast.makeText(this, "DELETE", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, restaurantInfo.name + " " + restaurantInfo.id, Toast.LENGTH_SHORT).show();
+        }
     }
 }

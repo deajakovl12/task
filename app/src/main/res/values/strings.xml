@@ -9,5 +9,6 @@
 
     <!-- Home Activity -->
     <string name="home_activity_menu_google_map">Google map</string>
+    <string name="home_activity_toolbar_title">List of restaurants</string>
 
 </resources>

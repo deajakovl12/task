@@ -46,7 +46,7 @@ public final class HomePresenterImpl extends BasePresenter implements HomePresen
     }
 
     @Override
-    public void getMovieInfo() {
+    public void getRestaurants() {
         if (view != null) {
             addDisposable(restaurantUseCase.getLocalRestaurantData()
                                       .subscribeOn(subscribeScheduler)

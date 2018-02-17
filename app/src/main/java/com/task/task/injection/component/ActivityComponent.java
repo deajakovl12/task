@@ -2,10 +2,12 @@ package com.task.task.injection.component;
 
 
 import com.task.task.injection.module.ActivityModule;
+import com.task.task.injection.module.AdapterModule;
 import com.task.task.injection.module.PresenterModule;
 import com.task.task.injection.module.RouterModule;
 import com.task.task.injection.scope.ForActivity;
 import com.task.task.ui.base.activities.BaseActivity;
+import com.task.task.ui.home.HomeActivityRecyclerViewAdapter;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomeRouter;
 import com.task.task.ui.splash.SplashPresenter;
@@ -22,7 +24,8 @@ import dagger.Component;
         modules = {
                 ActivityModule.class,
                 PresenterModule.class,
-                RouterModule.class
+                RouterModule.class,
+                AdapterModule.class
         }
 )
 public interface ActivityComponent extends ActivityComponentActivityInjects, ActivityComponentFragmentsInjects {
@@ -48,6 +51,7 @@ public interface ActivityComponent extends ActivityComponentActivityInjects, Act
 
     SplashPresenter getSplashPresenter();
 
+    HomeActivityRecyclerViewAdapter provideHomeActivityRecyclerViewAdapter();
 
 }
 

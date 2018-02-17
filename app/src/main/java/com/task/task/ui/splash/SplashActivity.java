@@ -49,7 +49,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void dataLoaded(String infoAboutData) {
-        Timber.e("data here");
         new Handler().postDelayed(() -> router.goToHomeScreen(infoAboutData),
                 getResources().getInteger(R.integer.splash_display_duration));
     }

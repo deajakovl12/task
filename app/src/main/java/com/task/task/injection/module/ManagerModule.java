@@ -1,6 +1,7 @@
 package com.task.task.injection.module;
 
 import android.net.ConnectivityManager;
+import android.support.v7.widget.LinearLayoutManager;
 
 import com.task.task.application.TaskApplication;
 import com.task.task.manager.NetworkManager;
@@ -34,5 +35,11 @@ public final class ManagerModule {
     @Singleton
     NetworkManager provideNetworkManager(final ConnectivityManager connectivityManager) {
         return new NetworkManagerImpl(connectivityManager);
+    }
+
+    @Provides
+    @Singleton
+    LinearLayoutManager provideLinearLayoutManager(final TaskApplication application) {
+        return new LinearLayoutManager(application);
     }
 }

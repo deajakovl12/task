@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3c1950</color>
-    <color name="colorPrimaryDark">#250f35</color>
-    <color name="colorAccent">#4f2668</color>
+    <color name="colorPrimary">#283655</color>
+    <color name="colorPrimaryDark">#1e1f26</color>
+    <color name="colorAccent">#d0e1f9</color>
 
     <color name="snackbar_red">#D50000</color>
     <color name="snackbar_green">#558B2F</color>
+    <color name="restaurant_item_background">#4d648d</color>
+
 </resources>
