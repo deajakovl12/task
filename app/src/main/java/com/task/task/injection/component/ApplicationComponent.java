@@ -11,6 +11,7 @@ import com.task.task.data.storage.TaskPreferences;
 import com.task.task.data.storage.database.DatabaseHelper;
 import com.task.task.device.ApplicationInformation;
 import com.task.task.device.DeviceInformation;
+import com.task.task.domain.usecase.LocalImagesUseCase;
 import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.module.ApiModule;
 import com.task.task.injection.module.ApplicationModule;
@@ -91,4 +92,6 @@ public interface ApplicationComponent extends ApplicationComponentInjects {
     PreferenceRepository getPreferenceRepository();
 
     LinearLayoutManager getLinearLayoutManager();
+
+    LocalImagesUseCase getLocalImagesUseCase();
 }

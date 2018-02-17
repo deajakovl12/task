@@ -15,5 +15,11 @@
     <!-- Restaurant details activity -->
     <string name="restaurant_details_activity_toolbar_title">Restaurant details</string>
     <string name="restaurant_details_activity_menu_save">SAVE</string>
+    <string name="take_photo">Take new photo</string>
+    <string name="add_photo_from_gallery">Add photo from gallery</string>
+
+    <!-- Gallery activity -->
+    <string name="local_images_failure">Couldn\'t fetch local images</string>
+    <string name="storage_permission_request">To access gallery photos enable this permission</string>
 
 </resources>

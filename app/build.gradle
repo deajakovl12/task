@@ -67,6 +67,7 @@ dependencies {
 
     debugCompile 'im.dino:dbinspector:3.4.1@aar'
     compile 'com.androidadvance:topsnackbar:1.1.1'
-
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.karumi:dexter:4.2.0'
 
 }

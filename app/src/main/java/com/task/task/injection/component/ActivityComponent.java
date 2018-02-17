@@ -7,6 +7,7 @@ import com.task.task.injection.module.PresenterModule;
 import com.task.task.injection.module.RouterModule;
 import com.task.task.injection.scope.ForActivity;
 import com.task.task.ui.base.activities.BaseActivity;
+import com.task.task.ui.gallery.GalleryActivityPresenter;
 import com.task.task.ui.home.HomeActivityRecyclerViewAdapter;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomeRouter;
@@ -52,6 +53,8 @@ public interface ActivityComponent extends ActivityComponentActivityInjects, Act
     SplashPresenter getSplashPresenter();
 
     HomeActivityRecyclerViewAdapter provideHomeActivityRecyclerViewAdapter();
+
+    GalleryActivityPresenter getGalleryActivityPresenter();
 
 }
 

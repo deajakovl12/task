@@ -21,6 +21,10 @@ public class Constants {
     public interface RestaurantDetailsActivityConstants{
         String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
 
+    }
+
+    public interface GalleryActivityConstants{
+        int STORAGE_PERMISSION_CODE = 41415;
 
     }
 }

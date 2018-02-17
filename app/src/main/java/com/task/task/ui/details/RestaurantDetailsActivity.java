@@ -1,21 +1,35 @@
 package com.task.task.ui.details;
 
+import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.TextInputEditText;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.task.task.R;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
+import com.task.task.ui.gallery.GalleryActivity;
 
 import javax.inject.Inject;
 
@@ -108,7 +122,83 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
 
     @OnClick(R.id.activity_restaurant_details_camera)
     public void addOrChangeImage() {
-        Toast.makeText(this, "camera", Toast.LENGTH_SHORT).show();
+        showAddProfilePhotoDialog();
+    }
+
+    private void showAddProfilePhotoDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.take_or_choose_photo);
+
+        RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton rb = dialog.findViewById(checkedId);
+
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(() -> {
+                if (rb.getText().equals(getString(R.string.take_photo))) {
+                    takeAnotherPhoto();
+                } else {
+                    addPhotoFromGallery();
+                }
+                dialog.dismiss();
+            }, 500);
+        });
+        dialog.show();
+    }
+
+    private void addPhotoFromGallery() {
+        checkPermission();
+    }
+
+    private void checkPermission() {
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        startActivity(new Intent(RestaurantDetailsActivity.this, GalleryActivity.class));
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        // check for permanent denial of permission
+                        Toast.makeText(RestaurantDetailsActivity.this, "Not graned", Toast.LENGTH_SHORT).show();
+                        if (response.isPermanentlyDenied()) {
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+
+    }
+
+    private void takeAnotherPhoto() {
+        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+            try {
+                photoFile = new File(MyProfileActivity.this.getExternalCacheDir(), "image_taken.jpeg");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", photoFile);
+                } else {
+                    photoURI = Uri.fromFile(photoFile);
+                }
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }*/
+        Toast.makeText(this, "NEW", Toast.LENGTH_SHORT).show();
     }
 
     private void setUpToolbar() {
@@ -118,7 +208,6 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-
 
     private void showDataToUser() {
         restauantName.setText(restaurantInfo.name);
