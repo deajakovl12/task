@@ -51,6 +51,9 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     @Inject
     HomeActivityRecyclerViewAdapter homeActivityRecyclerViewAdapter;
 
+    @Inject
+    HomeRouter router;
+
     @BindView(R.id.home_activity_recycler_view)
     RecyclerView recyclerView;
 
@@ -200,7 +203,7 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
         if (deleteRestaurant) {
             Toast.makeText(this, "DELETE", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, restaurantInfo.name + " " + restaurantInfo.id, Toast.LENGTH_SHORT).show();
+            router.onRestaurantDetails(restaurantInfo);
         }
     }
 }

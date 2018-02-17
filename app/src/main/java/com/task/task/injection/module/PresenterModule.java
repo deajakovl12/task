@@ -6,6 +6,8 @@ import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.scope.ForActivity;
 import com.task.task.manager.NetworkManager;
 import com.task.task.manager.StringManager;
+import com.task.task.ui.details.RestaurantDetailsPresenter;
+import com.task.task.ui.details.RestaurantDetailsPresenterImpl;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomePresenterImpl;
 import com.task.task.ui.splash.SplashPresenter;
@@ -39,5 +41,12 @@ public final class PresenterModule {
                                            NetworkManager networkManager, StringManager stringManager, PreferenceRepository preferenceRepository) {
         return new SplashPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase,
                 restaurantsAPIConverter, networkManager, stringManager, preferenceRepository);
+    }
+
+    @ForActivity
+    @Provides
+    RestaurantDetailsPresenter provideRestaurantDetailsPresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
+                                                    @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, StringManager stringManager) {
+        return new RestaurantDetailsPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager);
     }
 }

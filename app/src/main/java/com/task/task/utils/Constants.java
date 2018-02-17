@@ -17,4 +17,10 @@ public class Constants {
         int ICON_SIZE = 24;
         int ICON_PADDING = 8;
     }
+
+    public interface RestaurantDetailsActivityConstants{
+        String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
+
+
+    }
 }

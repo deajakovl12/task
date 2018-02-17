@@ -1,6 +1,8 @@
 package com.task.task.ui.home;
 
+import com.task.task.domain.model.RestaurantInfo;
+
 public interface HomeRouter {
 
-    void onDeviceDetails(long deviceId);
+    void onRestaurantDetails(RestaurantInfo restaurantInfo);
 }

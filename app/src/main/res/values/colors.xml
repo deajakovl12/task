@@ -2,8 +2,10 @@
 <resources>
     <color name="colorPrimary">#283655</color>
     <color name="colorPrimaryDark">#1e1f26</color>
-    <color name="colorAccent">#d0e1f9</color>
+    <color name="colorAccent">#7998c2</color>
 
+
+    <color name="no_image_background_color">#d0e1f9</color>
     <color name="snackbar_red">#D50000</color>
     <color name="snackbar_green">#558B2F</color>
     <color name="restaurant_item_background">#4d648d</color>

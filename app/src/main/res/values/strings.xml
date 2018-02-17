@@ -11,4 +11,9 @@
     <string name="home_activity_menu_google_map">Google map</string>
     <string name="home_activity_toolbar_title">List of restaurants</string>
 
+
+    <!-- Restaurant details activity -->
+    <string name="restaurant_details_activity_toolbar_title">Restaurant details</string>
+    <string name="restaurant_details_activity_menu_save">SAVE</string>
+
 </resources>
