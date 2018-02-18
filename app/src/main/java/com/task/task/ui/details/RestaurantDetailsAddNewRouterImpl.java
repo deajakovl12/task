@@ -7,11 +7,11 @@ import com.task.task.ui.gallery.GalleryActivity;
 
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_CODE;
 
-public class RestaurantDetailsRouterImpl implements RestaurantDetailsRouter {
+public class RestaurantDetailsAddNewRouterImpl implements RestaurantDetailsAddNewRouter {
 
     private final Activity activity;
 
-    public RestaurantDetailsRouterImpl(final Activity activity) {
+    public RestaurantDetailsAddNewRouterImpl(final Activity activity) {
         this.activity = activity;
     }
 
@@ -23,6 +23,6 @@ public class RestaurantDetailsRouterImpl implements RestaurantDetailsRouter {
 
     @Override
     public void openCamera() {
-        //activity.startActivity(RestaurantDetailsActivity.createIntent(activity, restaurantInfo));
+        //activity.startActivity(RestaurantDetailsAddNewAddNewActivity.createIntent(activity, restaurantInfo));
     }
 }

@@ -1,7 +1,7 @@
 package com.task.task.ui.details;
 
 
-public interface RestaurantDetailsView {
+public interface RestaurantDetailsAddNewView {
 
     void restaurantDataUpdated();
 }

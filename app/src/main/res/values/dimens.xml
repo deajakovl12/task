@@ -63,4 +63,5 @@
     <dimen name="restaurant_item_delete_icon_margin_top">8dp</dimen>
     <dimen name="restaurant_item_delete_icon_padding">6dp</dimen>
     <dimen name="selected_photo_fragment_image_margin_bottom">230dp</dimen>
+    <dimen name="activity_restaurant_details_text_size">14sp</dimen>
 </resources>

@@ -26,11 +26,11 @@
         </activity>
         <activity android:name=".ui.home.HomeActivity" />
         <activity
-            android:name=".ui.details.RestaurantDetailsActivity"
+            android:name=".ui.details.RestaurantDetailsAddNewAddNewActivity"
             android:parentActivityName=".ui.home.HomeActivity" />
         <activity
             android:name=".ui.gallery.GalleryActivity"
-            android:parentActivityName=".ui.details.RestaurantDetailsActivity"
+            android:parentActivityName=".ui.details.RestaurantDetailsAddNewAddNewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -48,16 +49,18 @@ import timber.log.Timber;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_CODE;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_EXTRA;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.REQUEST_IMAGE_CAPTURE;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_ADD_OR_EDIT;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_DETAILS_INFO;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_EDIT;
 
-public class RestaurantDetailsActivity extends BaseActivity implements RestaurantDetailsView {
+public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implements RestaurantDetailsAddNewView {
 
-
-    @Inject
-    RestaurantDetailsPresenter presenter;
 
     @Inject
-    RestaurantDetailsRouter router;
+    RestaurantDetailsAddNewPresenter presenter;
+
+    @Inject
+    RestaurantDetailsAddNewRouter router;
 
     RestaurantInfo restaurantInfo;
 
@@ -81,9 +84,10 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
 
     private Uri imageUri;
     private File photoFile = null;
+    private String addOrEdit;
 
-    public static Intent createIntent(final Context context, final RestaurantInfo restaurantInfo) {
-        return new Intent(context, RestaurantDetailsActivity.class).putExtra(RESTAURANT_DETAILS_INFO, restaurantInfo);
+    public static Intent createIntent(final Context context, final RestaurantInfo restaurantInfo, final String addOrEdit) {
+        return new Intent(context, RestaurantDetailsAddNewAddNewActivity.class).putExtra(RESTAURANT_DETAILS_INFO, restaurantInfo).putExtra(RESTAURANT_ADD_OR_EDIT, addOrEdit);
     }
 
     @Override
@@ -120,10 +124,14 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_restaurant_details_save:
-                restaurantInfo.name = restauantName.getText().toString();
-                restaurantInfo.address = restaurantAddress.getText().toString();
-                restaurantInfo.imageUri = imageUri;
-                presenter.updateRestaurantData(restaurantInfo);
+                if (addOrEdit.equals(RESTAURANT_EDIT)) {
+                    restaurantInfo.name = restauantName.getText().toString();
+                    restaurantInfo.address = restaurantAddress.getText().toString();
+                    restaurantInfo.imageUri = imageUri;
+                    presenter.updateRestaurantData(restaurantInfo);
+                } else {
+                    Toast.makeText(this, "ADD new", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -144,12 +152,8 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         if (requestCode == PICK_GALLERY_IMAGE_CODE) {
             if (resultCode == RESULT_OK) {
                 imageUri = Uri.parse(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA));
-                Glide.with(this)
-                        .load(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA))
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .centerCrop()
-                        .into(restaurantImage);
+                setUpImage(imageUri);
+
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -162,14 +166,7 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
                 }
             }
             imageUri = photoURI;
-            Timber.e(String.valueOf(imageUri));
-            Glide.with(this)
-                    .load(String.valueOf(imageUri))
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .centerCrop()
-                    .into(restaurantImage);
-
+            setUpImage(imageUri);
         }
     }
 
@@ -211,11 +208,17 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        setUpToolbar();
-
                         restaurantInfo = getIntent().getParcelableExtra(RESTAURANT_DETAILS_INFO);
-                        imageUri = restaurantInfo.imageUri;
-                        showDataToUser();
+                        addOrEdit = getIntent().getStringExtra(RESTAURANT_ADD_OR_EDIT);
+
+                        setUpToolbar();
+                        if (addOrEdit.equals(RESTAURANT_EDIT)) {
+                            imageUri = restaurantInfo.imageUri;
+                            showDataToUser();
+                        } else {
+                            //TODO DOHVATI LOKACIJU
+                        }
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     }
 
                     @Override
@@ -236,7 +239,7 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             try {
-                photoFile = new File(RestaurantDetailsActivity.this.getExternalCacheDir(), restaurantInfo.id + ".jpeg");
+                photoFile = new File(RestaurantDetailsAddNewAddNewActivity.this.getExternalCacheDir(), restaurantInfo.id + ".jpeg");
             } catch (Exception e) {
                 Timber.e(e.getMessage());
             }
@@ -255,7 +258,11 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
 
     private void setUpToolbar() {
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(getString(R.string.restaurant_details_activity_toolbar_title));
+            if (addOrEdit.equals(RESTAURANT_EDIT)) {
+                getSupportActionBar().setTitle(getString(R.string.restaurant_details_activity_toolbar_title));
+            } else {
+                getSupportActionBar().setTitle(getString(R.string.restaurant_details_activity_toolbar_title_add));
+            }
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -264,12 +271,16 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     private void showDataToUser() {
         restauantName.setText(restaurantInfo.name);
         restauantName.setSelection(restauantName.getText().length());
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         restaurantAddress.setText(restaurantInfo.address);
         restaurantLongitude.setText(String.valueOf(restaurantInfo.longitude));
         restaurantLatitude.setText(String.valueOf(restaurantInfo.latitude));
+        setUpImage(restaurantInfo.imageUri);
+
+    }
+
+    private void setUpImage(Uri imageUriArg) {
         Glide.with(this)
-                .load(String.valueOf(restaurantInfo.imageUri))
+                .load(String.valueOf(imageUriArg))
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .centerCrop()

@@ -14,10 +14,10 @@ import timber.log.Timber;
 import static com.task.task.injection.module.ThreadingModule.OBSERVE_SCHEDULER;
 import static com.task.task.injection.module.ThreadingModule.SUBSCRIBE_SCHEDULER;
 
-public class RestaurantDetailsPresenterImpl extends BasePresenter implements RestaurantDetailsPresenter {
+public class RestaurantDetailsAddNewPresenterImpl extends BasePresenter implements RestaurantDetailsAddNewPresenter {
 
 
-    private RestaurantDetailsView view;
+    private RestaurantDetailsAddNewView view;
 
     private final RestaurantUseCase restaurantUseCase;
 
@@ -27,9 +27,9 @@ public class RestaurantDetailsPresenterImpl extends BasePresenter implements Res
 
     private final StringManager stringManager;
 
-    public RestaurantDetailsPresenterImpl(@Named(SUBSCRIBE_SCHEDULER) final Scheduler subscribeScheduler,
-                                          @Named(OBSERVE_SCHEDULER) final Scheduler observeScheduler, final RestaurantUseCase restaurantUseCase,
-                                          final StringManager stringManager) {
+    public RestaurantDetailsAddNewPresenterImpl(@Named(SUBSCRIBE_SCHEDULER) final Scheduler subscribeScheduler,
+                                                @Named(OBSERVE_SCHEDULER) final Scheduler observeScheduler, final RestaurantUseCase restaurantUseCase,
+                                                final StringManager stringManager) {
         this.subscribeScheduler = subscribeScheduler;
         this.observeScheduler = observeScheduler;
         this.restaurantUseCase = restaurantUseCase;
@@ -37,7 +37,7 @@ public class RestaurantDetailsPresenterImpl extends BasePresenter implements Res
     }
 
     @Override
-    public void setView(RestaurantDetailsView view) {
+    public void setView(RestaurantDetailsAddNewView view) {
         this.view = view;
     }
 

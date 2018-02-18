@@ -4,5 +4,6 @@ import com.task.task.domain.model.RestaurantInfo;
 
 public interface HomeRouter {
 
-    void onRestaurantDetails(RestaurantInfo restaurantInfo);
+    void onRestaurantDetailsOrAddNew(RestaurantInfo restaurantInfo, String addOrEdit);
+
 }

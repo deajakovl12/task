@@ -1,7 +1,7 @@
 package com.task.task.ui.details;
 
 
-public interface RestaurantDetailsRouter {
+public interface RestaurantDetailsAddNewRouter {
 
     void openGallery();
 

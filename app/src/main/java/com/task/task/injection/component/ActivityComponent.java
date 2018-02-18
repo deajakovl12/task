@@ -9,7 +9,7 @@ import com.task.task.injection.module.RecyclerModule;
 import com.task.task.injection.module.RouterModule;
 import com.task.task.injection.scope.ForActivity;
 import com.task.task.ui.base.activities.BaseActivity;
-import com.task.task.ui.details.RestaurantDetailsRouter;
+import com.task.task.ui.details.RestaurantDetailsAddNewRouter;
 import com.task.task.ui.gallery.GalleryActivityPresenter;
 import com.task.task.ui.gallery.GalleryPhotoRecyclerViewAdapter;
 import com.task.task.ui.home.HomeActivityRecyclerViewAdapter;
@@ -65,7 +65,7 @@ public interface ActivityComponent extends ActivityComponentActivityInjects, Act
 
     GalleryActivityPresenter getGalleryActivityPresenter();
 
-    RestaurantDetailsRouter getRestaurantDetailsRouter();
+    RestaurantDetailsAddNewRouter getRestaurantDetailsRouter();
 
     GalleryPhotoRecyclerViewAdapter getGalleryPhotoRecyclerViewAdapter();
 

@@ -22,6 +22,9 @@ public class Constants {
 
     public interface RestaurantDetailsActivityConstants {
         String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
+        String RESTAURANT_ADD_OR_EDIT = "restaurant_add_or_edit";
+        String RESTAURANT_EDIT = "restaurant_edit";
+        String RESTAURANT_ADD = "restaurant_add";
         int PICK_GALLERY_IMAGE_CODE = 21414;
         String PICK_GALLERY_IMAGE_EXTRA = "image_uri_extra";
 

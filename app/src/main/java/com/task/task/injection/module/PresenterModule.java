@@ -7,8 +7,8 @@ import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.scope.ForActivity;
 import com.task.task.manager.NetworkManager;
 import com.task.task.manager.StringManager;
-import com.task.task.ui.details.RestaurantDetailsPresenter;
-import com.task.task.ui.details.RestaurantDetailsPresenterImpl;
+import com.task.task.ui.details.RestaurantDetailsAddNewPresenter;
+import com.task.task.ui.details.RestaurantDetailsAddNewPresenterImpl;
 import com.task.task.ui.gallery.GalleryActivityPresenter;
 import com.task.task.ui.gallery.GalleryActivityPresenterImpl;
 import com.task.task.ui.home.HomePresenter;
@@ -48,9 +48,9 @@ public final class PresenterModule {
 
     @ForActivity
     @Provides
-    RestaurantDetailsPresenter provideRestaurantDetailsPresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
-                                                                 @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, StringManager stringManager) {
-        return new RestaurantDetailsPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager);
+    RestaurantDetailsAddNewPresenter provideRestaurantDetailsPresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
+                                                                       @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, StringManager stringManager) {
+        return new RestaurantDetailsAddNewPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager);
     }
 
 

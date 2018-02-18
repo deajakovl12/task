@@ -36,6 +36,8 @@ import static com.task.task.utils.Constants.HomeActivityConstants.DATA_INFO;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_LOADED_FROM_DB;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_NOT_DOWNLOADED_NO_INTERNET;
 import static com.task.task.utils.Constants.HomeActivityConstants.UPDATE_RESTAURANT_CODE;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_ADD;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_EDIT;
 import static com.task.task.utils.Constants.SnackBarConstants.ICON_PADDING;
 import static com.task.task.utils.Constants.SnackBarConstants.ICON_SIZE;
 
@@ -155,7 +157,8 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
 
     @OnClick(R.id.home_activity_fab)
     public void fabClicked() {
-        Toast.makeText(this, "FAB", Toast.LENGTH_SHORT).show();
+        router.onRestaurantDetailsOrAddNew(RestaurantInfo.EMPTY, RESTAURANT_ADD);
+
     }
 
     @Override
@@ -207,7 +210,7 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
         if (deleteRestaurant) {
             presenter.deleteRestaurant(restaurantInfo.id);
         } else {
-            router.onRestaurantDetails(restaurantInfo);
+            router.onRestaurantDetailsOrAddNew(restaurantInfo, RESTAURANT_EDIT);
         }
     }
 

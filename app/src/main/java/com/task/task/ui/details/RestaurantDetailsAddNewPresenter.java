@@ -3,9 +3,9 @@ package com.task.task.ui.details;
 
 import com.task.task.domain.model.RestaurantInfo;
 
-public interface RestaurantDetailsPresenter {
+public interface RestaurantDetailsAddNewPresenter {
 
-    void setView(RestaurantDetailsView view);
+    void setView(RestaurantDetailsAddNewView view);
 
     void updateRestaurantData(RestaurantInfo restaurantInfo);
 
