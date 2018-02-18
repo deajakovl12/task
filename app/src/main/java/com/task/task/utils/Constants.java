@@ -24,6 +24,11 @@ public class Constants {
         String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
         int PICK_GALLERY_IMAGE_CODE = 21414;
         String PICK_GALLERY_IMAGE_EXTRA = "image_uri_extra";
+
+        int REQUEST_IMAGE_CAPTURE = 4451;
+        int COMPRESS_QUALITY = 100;
+
+
     }
 
     public interface GalleryActivityConstants {

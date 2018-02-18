@@ -5,11 +5,15 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.FileProvider;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.karumi.dexter.Dexter;
@@ -33,6 +36,8 @@ import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -42,6 +47,7 @@ import timber.log.Timber;
 
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_CODE;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_EXTRA;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.REQUEST_IMAGE_CAPTURE;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_DETAILS_INFO;
 
 public class RestaurantDetailsActivity extends BaseActivity implements RestaurantDetailsView {
@@ -74,6 +80,7 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     TextView restaurantLatitude;
 
     private Uri imageUri;
+    private File photoFile = null;
 
     public static Intent createIntent(final Context context, final RestaurantInfo restaurantInfo) {
         return new Intent(context, RestaurantDetailsActivity.class).putExtra(RESTAURANT_DETAILS_INFO, restaurantInfo);
@@ -85,11 +92,8 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         setContentView(R.layout.activity_restaurant_details);
 
         ButterKnife.bind(this);
-        setUpToolbar();
+        checkPermissionExternalStorage();
 
-        restaurantInfo = getIntent().getParcelableExtra(RESTAURANT_DETAILS_INFO);
-        imageUri = restaurantInfo.imageUri;
-        showDataToUser();
     }
 
 
@@ -143,6 +147,19 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
                 Glide.with(this).load(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA)).centerCrop().into(restaurantImage);
             }
         }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Uri photoURI = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                photoURI = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", photoFile);
+            } else {
+                if (photoFile != null) {
+                    photoURI = Uri.fromFile(photoFile);
+                }
+            }
+            imageUri = photoURI;
+            Glide.with(this).load(String.valueOf(imageUri)).centerCrop().into(restaurantImage);
+
+        }
     }
 
     @OnClick(R.id.activity_restaurant_details_camera)
@@ -163,7 +180,7 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
             Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(() -> {
                 if (rb.getText().equals(getString(R.string.take_photo))) {
-                    takeAnotherPhoto();
+                    takePhoto();
                 } else {
                     addPhotoFromGallery();
                 }
@@ -174,21 +191,26 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     }
 
     private void addPhotoFromGallery() {
-        checkPermission();
+        router.openGallery();
     }
 
-    private void checkPermission() {
+    private void checkPermissionExternalStorage() {
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        router.openGallery();
+                        setUpToolbar();
+
+                        restaurantInfo = getIntent().getParcelableExtra(RESTAURANT_DETAILS_INFO);
+                        imageUri = restaurantInfo.imageUri;
+                        showDataToUser();
                     }
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
                         Timber.e(getString(R.string.permission_not_granted));
+                        finish();
                     }
 
                     @Override
@@ -199,28 +221,26 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
 
     }
 
-    private void takeAnotherPhoto() {
-        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private void takePhoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
             try {
-                photoFile = new File(MyProfileActivity.this.getExternalCacheDir(), "image_taken.jpeg");
+                photoFile = new File(RestaurantDetailsActivity.this.getExternalCacheDir(), restaurantInfo.id + ".jpeg");
 
             } catch (Exception e) {
-                e.printStackTrace();
+                Timber.e(e.getMessage());
             }
             if (photoFile != null) {
                 Uri photoURI;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    photoURI = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", photoFile);
+                    photoURI = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", photoFile);
                 } else {
                     photoURI = Uri.fromFile(photoFile);
                 }
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
-        }*/
-        Toast.makeText(this, "NEW", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setUpToolbar() {
