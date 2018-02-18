@@ -15,11 +15,11 @@ public interface DatabaseHelper {
 
     Single<List<RestaurantInfo>> getLocalRestaurantData();
 
-    Observable<Boolean> addAllRestaurants(List<RestaurantInfo> listOfRestaurants);
+    Completable addAllRestaurants(List<RestaurantInfo> listOfRestaurants);
 
-    Observable<Boolean> deleteRestaurant(int restaurantId);
+    Completable deleteRestaurant(int restaurantId);
 
-    ObservableSource<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo);
+    Completable updateRestaurantData(RestaurantInfo restaurantInfo);
 
     Completable addNewRestaurant(RestaurantInfo restaurantInfo);
 }

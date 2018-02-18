@@ -14,13 +14,13 @@ public interface RestaurantUseCase {
 
     Single<List<RestaurantsApiResponse>> getRestaurantInfo();
 
-    Observable<Boolean> addAllRestaurants(List<RestaurantInfo> listOfRestaurants);
+    Completable addAllRestaurants(List<RestaurantInfo> listOfRestaurants);
 
     Single<List<RestaurantInfo>> getLocalRestaurantData();
 
-    Observable<Boolean> deleteRestaurant(int restaurantId);
+    Completable deleteRestaurant(int restaurantId);
 
-    Observable<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo);
+    Completable updateRestaurantData(RestaurantInfo restaurantInfo);
 
     Completable addNewRestaurant(RestaurantInfo restaurantInfo);
 }

@@ -92,7 +92,7 @@ public class SplashPresenterImpl extends BasePresenter implements SplashPresente
 
     }
 
-    private void onSaveDataLocallySuccess(Boolean savedOrNot) {
+    private void onSaveDataLocallySuccess() {
         preferenceRepository.setDataDownoladed();
         if (view != null) {
             view.dataLoaded(DATA_DOWNLOADED);

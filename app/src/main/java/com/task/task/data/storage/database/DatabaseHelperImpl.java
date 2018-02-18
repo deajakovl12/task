@@ -9,15 +9,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 import com.task.task.data.storage.PreferenceRepository;
-import com.task.task.data.storage.TaskPreferences;
 import com.task.task.domain.model.RestaurantInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 
 public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelper {
@@ -50,8 +47,8 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
 
 
     @Override
-    public Observable<Boolean> addAllRestaurants(List<RestaurantInfo> listOfRestaurants) {
-        return Observable.defer(() -> {
+    public Completable addAllRestaurants(List<RestaurantInfo> listOfRestaurants) {
+        return Completable.defer(() -> {
             SQLiteDatabase db = this.getWritableDatabase();
             db.beginTransaction();
             int lastId = 0;
@@ -70,12 +67,10 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
                 preferenceRepository.setLastRestaurantId(lastId);
                 db.setTransactionSuccessful();
 
-            } catch (Exception e) {
-                return Observable.just(false);
             } finally {
                 db.endTransaction();
             }
-            return Observable.just(true);
+            return Completable.complete();
         });
     }
 
@@ -113,37 +108,32 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
     }
 
     @Override
-    public Observable<Boolean> deleteRestaurant(int restaurantId) {
-        return Observable.defer(() -> {
-            try {
-                SQLiteDatabase db = getReadableDatabase();
-                String selection = RestaurantContract.RestaurantEntry.RESTAURANT_ID + "=?";
-                String[] selectionArgs = {String.valueOf(restaurantId)};
-                db.delete(RestaurantContract.RestaurantEntry.TABLE_NAME, selection, selectionArgs);
-            } catch (Exception e) {
-                return Observable.just(false);
-            }
-            return Observable.just(true);
+    public Completable deleteRestaurant(int restaurantId) {
+        return Completable.defer(() -> {
+            SQLiteDatabase db = getReadableDatabase();
+            String selection = RestaurantContract.RestaurantEntry.RESTAURANT_ID + "=?";
+            String[] selectionArgs = {String.valueOf(restaurantId)};
+            db.delete(RestaurantContract.RestaurantEntry.TABLE_NAME, selection, selectionArgs);
+
+            return Completable.complete();
         });
 
     }
 
     @Override
-    public ObservableSource<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo) {
-        return Observable.defer(() -> {
-            try {
-                ContentValues values = new ContentValues();
-                SQLiteDatabase db = getReadableDatabase();
-                values.put(RestaurantContract.RestaurantEntry.RESTAURANT_NAME, restaurantInfo.name);
-                values.put(RestaurantContract.RestaurantEntry.RESTAURANT_ADDRESS, restaurantInfo.address);
-                values.put(RestaurantContract.RestaurantEntry.RESTAURANT_URI, String.valueOf(restaurantInfo.imageUri));
-                String selection = RestaurantContract.RestaurantEntry.RESTAURANT_ID + "=?";
-                String[] selectionArgs = {String.valueOf(restaurantInfo.id)};
-                db.update(RestaurantContract.RestaurantEntry.TABLE_NAME, values, selection, selectionArgs);
-            } catch (Exception e) {
-                return Observable.just(false);
-            }
-            return Observable.just(true);
+    public Completable updateRestaurantData(RestaurantInfo restaurantInfo) {
+        return Completable.defer(() -> {
+
+            ContentValues values = new ContentValues();
+            SQLiteDatabase db = getReadableDatabase();
+            values.put(RestaurantContract.RestaurantEntry.RESTAURANT_NAME, restaurantInfo.name);
+            values.put(RestaurantContract.RestaurantEntry.RESTAURANT_ADDRESS, restaurantInfo.address);
+            values.put(RestaurantContract.RestaurantEntry.RESTAURANT_URI, String.valueOf(restaurantInfo.imageUri));
+            String selection = RestaurantContract.RestaurantEntry.RESTAURANT_ID + "=?";
+            String[] selectionArgs = {String.valueOf(restaurantInfo.id)};
+            db.update(RestaurantContract.RestaurantEntry.TABLE_NAME, values, selection, selectionArgs);
+
+            return Completable.complete();
         });
     }
 

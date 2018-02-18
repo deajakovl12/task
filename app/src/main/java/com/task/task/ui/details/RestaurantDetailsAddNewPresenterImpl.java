@@ -59,8 +59,8 @@ public class RestaurantDetailsAddNewPresenterImpl extends BasePresenter implemen
         Timber.e(throwable.getMessage());
     }
 
-    private void onUpdateRestaurantDataSuccess(Boolean success) {
-        if (success && view != null) {
+    private void onUpdateRestaurantDataSuccess() {
+        if (view != null) {
             view.restaurantDataUpdated();
         }
     }

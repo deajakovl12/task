@@ -76,8 +76,8 @@ public final class HomePresenterImpl extends BasePresenter implements HomePresen
         Timber.e(throwable.getMessage());
     }
 
-    private void onDeleteRestaurantSuccess(Boolean success) {
-        if (success && view != null) {
+    private void onDeleteRestaurantSuccess() {
+        if (view != null) {
             view.restaurantDeleted();
         }
     }

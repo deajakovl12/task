@@ -37,8 +37,8 @@ public class RestaurantUseCaseImpl implements RestaurantUseCase {
     }
 
     @Override
-    public Observable<Boolean> addAllRestaurants(List<RestaurantInfo> listOfRestaurants) {
-        return Observable
+    public Completable addAllRestaurants(List<RestaurantInfo> listOfRestaurants) {
+        return Completable
                 .defer(() -> databaseHelper.addAllRestaurants(listOfRestaurants));
     }
 
@@ -48,13 +48,13 @@ public class RestaurantUseCaseImpl implements RestaurantUseCase {
     }
 
     @Override
-    public Observable<Boolean> deleteRestaurant(int restaurantId) {
-        return Observable.defer(() -> databaseHelper.deleteRestaurant(restaurantId));
+    public Completable deleteRestaurant(int restaurantId) {
+        return Completable.defer(() -> databaseHelper.deleteRestaurant(restaurantId));
     }
 
     @Override
-    public Observable<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo) {
-        return Observable.defer(() -> databaseHelper.updateRestaurantData(restaurantInfo));
+    public Completable updateRestaurantData(RestaurantInfo restaurantInfo) {
+        return Completable.defer(() -> databaseHelper.updateRestaurantData(restaurantInfo));
     }
 
     @Override
