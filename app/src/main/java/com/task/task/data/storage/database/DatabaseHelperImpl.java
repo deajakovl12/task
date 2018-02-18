@@ -10,13 +10,11 @@ import android.net.Uri;
 
 import com.task.task.domain.model.RestaurantInfo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import retrofit2.Response;
 
 public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelper {
 
@@ -102,5 +100,21 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
             cursor.close();
             return Single.just(restaurantInfoList);
         });
+    }
+
+    @Override
+    public Observable<Boolean> deleteRestaurant(int restaurantId) {
+        return Observable.defer(() -> {
+            try {
+                SQLiteDatabase db = getReadableDatabase();
+                String selection = RestaurantContract.RestaurantEntry.RESTAURANT_ID + "=?";
+                String[] selectionArgs = {String.valueOf(restaurantId)};
+                db.delete(RestaurantContract.RestaurantEntry.TABLE_NAME, selection, selectionArgs);
+            } catch (Exception e) {
+                return Observable.just(false);
+            }
+            return Observable.just(true);
+        });
+
     }
 }

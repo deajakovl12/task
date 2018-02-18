@@ -204,9 +204,14 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     @Override
     public void onRestaurantClicked(RestaurantInfo restaurantInfo, int position, boolean deleteRestaurant) {
         if (deleteRestaurant) {
-            Toast.makeText(this, "DELETE", Toast.LENGTH_SHORT).show();
+            presenter.deleteRestaurant(restaurantInfo.id);
         } else {
             router.onRestaurantDetails(restaurantInfo);
         }
+    }
+
+    @Override
+    public void restaurantDeleted() {
+        Toast.makeText(this, R.string.home_activity_restaurant_deleted, Toast.LENGTH_SHORT).show();
     }
 }

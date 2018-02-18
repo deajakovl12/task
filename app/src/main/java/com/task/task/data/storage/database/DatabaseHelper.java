@@ -13,4 +13,6 @@ public interface DatabaseHelper {
     Single<List<RestaurantInfo>> getLocalRestaurantData();
 
     Observable<Boolean> addAllRestaurants(List<RestaurantInfo> listOfRestaurants);
+
+    Observable<Boolean> deleteRestaurant(int restaurantId);
 }

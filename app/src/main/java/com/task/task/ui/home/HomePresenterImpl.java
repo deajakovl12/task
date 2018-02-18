@@ -1,5 +1,7 @@
 package com.task.task.ui.home;
 
+import android.widget.Toast;
+
 import com.task.task.R;
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.domain.model.RestaurantInfo;
@@ -62,6 +64,25 @@ public final class HomePresenterImpl extends BasePresenter implements HomePresen
     private void onGetRestaurantsSuccess(final List<RestaurantInfo> restaurantInfo) {
         if (view != null) {
             view.showData(restaurantInfo);
+        }
+    }
+
+    @Override
+    public void deleteRestaurant(int restaurantId) {
+        addDisposable(restaurantUseCase.deleteRestaurant(restaurantId)
+                .subscribeOn(subscribeScheduler)
+                .observeOn(observeScheduler)
+                .subscribe(this::onDeleteRestaurantSuccess, this::onDeleteRestaurantFailure));
+    }
+
+
+    private void onDeleteRestaurantFailure(Throwable throwable) {
+        Timber.e(throwable.getMessage());
+    }
+
+    private void onDeleteRestaurantSuccess(Boolean success) {
+        if(success && view != null){
+            view.restaurantDeleted();
         }
     }
 }

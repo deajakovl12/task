@@ -7,4 +7,6 @@ public interface HomePresenter {
     void getRestaurants();
 
     void dispose();
+
+    void deleteRestaurant(int restaurantId);
 }

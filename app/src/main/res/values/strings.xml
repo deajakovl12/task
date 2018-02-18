@@ -27,5 +27,6 @@
     <string name="storage_permission_request">To access gallery photos enable this permission</string>
     <string name="gallery_menu_use">USE</string>
     <string name="permission_not_granted">Not granted</string>
+    <string name="home_activity_restaurant_deleted">Restaurant deleted</string>
 
 </resources>

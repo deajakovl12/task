@@ -46,4 +46,13 @@ public class RestaurantUseCaseImpl implements RestaurantUseCase {
         return Single.defer(() -> databaseHelper.getLocalRestaurantData());
     }
 
+    @Override
+    public Observable<Boolean> deleteRestaurant(int restaurantId) {
+        return Observable.defer(() -> databaseHelper.deleteRestaurant(restaurantId));
+    }
+
+    @Override
+    public Observable<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo) {
+        return null;
+    }
 }

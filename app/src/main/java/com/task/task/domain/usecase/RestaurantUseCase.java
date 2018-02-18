@@ -17,4 +17,8 @@ public interface RestaurantUseCase {
 
     Single<List<RestaurantInfo>> getLocalRestaurantData();
 
+    Observable<Boolean> deleteRestaurant(int restaurantId);
+
+    Observable<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo);
+
 }
