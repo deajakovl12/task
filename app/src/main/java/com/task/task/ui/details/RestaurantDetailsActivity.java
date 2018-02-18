@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -144,7 +144,12 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         if (requestCode == PICK_GALLERY_IMAGE_CODE) {
             if (resultCode == RESULT_OK) {
                 imageUri = Uri.parse(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA));
-                Glide.with(this).load(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA)).centerCrop().into(restaurantImage);
+                Glide.with(this)
+                        .load(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA))
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .centerCrop()
+                        .into(restaurantImage);
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -157,7 +162,13 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
                 }
             }
             imageUri = photoURI;
-            Glide.with(this).load(String.valueOf(imageUri)).centerCrop().into(restaurantImage);
+            Timber.e(String.valueOf(imageUri));
+            Glide.with(this)
+                    .load(String.valueOf(imageUri))
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .centerCrop()
+                    .into(restaurantImage);
 
         }
     }
@@ -226,7 +237,6 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             try {
                 photoFile = new File(RestaurantDetailsActivity.this.getExternalCacheDir(), restaurantInfo.id + ".jpeg");
-
             } catch (Exception e) {
                 Timber.e(e.getMessage());
             }
@@ -258,7 +268,12 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         restaurantAddress.setText(restaurantInfo.address);
         restaurantLongitude.setText(String.valueOf(restaurantInfo.longitude));
         restaurantLatitude.setText(String.valueOf(restaurantInfo.latitude));
-        Glide.with(this).load(String.valueOf(restaurantInfo.imageUri)).centerCrop().into(restaurantImage);
+        Glide.with(this)
+                .load(String.valueOf(restaurantInfo.imageUri))
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .centerCrop()
+                .into(restaurantImage);
     }
 
     @Override
