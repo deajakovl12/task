@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.task.task.R;
 import com.task.task.injection.component.ActivityComponent;
@@ -88,9 +87,7 @@ public class GalleryActivity extends BaseActivity implements GalleryView, Select
 
     @Override
     public void saveThisPhoto(String imageUri) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(PICK_GALLERY_IMAGE_EXTRA, imageUri);
-        setResult(Activity.RESULT_OK, returnIntent);
+        setResult(Activity.RESULT_OK, new Intent().putExtra(PICK_GALLERY_IMAGE_EXTRA, imageUri));
         finish();
     }
 

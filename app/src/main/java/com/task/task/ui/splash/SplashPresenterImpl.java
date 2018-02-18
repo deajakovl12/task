@@ -1,28 +1,19 @@
 package com.task.task.ui.splash;
 
 
-import android.content.Context;
-import android.widget.Toast;
-
-import com.task.task.R;
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.data.storage.PreferenceRepository;
-import com.task.task.data.storage.database.DatabaseHelper;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.manager.NetworkManager;
 import com.task.task.manager.StringManager;
 import com.task.task.ui.base.presenter.BasePresenter;
-import com.task.task.ui.home.HomeView;
-import com.task.task.utils.Constants;
 
 import java.util.List;
 
 import javax.inject.Named;
 
 import io.reactivex.Scheduler;
-import retrofit2.Response;
-import timber.log.Timber;
 
 import static com.task.task.injection.module.ThreadingModule.OBSERVE_SCHEDULER;
 import static com.task.task.injection.module.ThreadingModule.SUBSCRIBE_SCHEDULER;

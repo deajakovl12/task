@@ -27,11 +27,10 @@ public class Constants {
         String RESTAURANT_ADD = "restaurant_add";
         int PICK_GALLERY_IMAGE_CODE = 21414;
         String PICK_GALLERY_IMAGE_EXTRA = "image_uri_extra";
-
+        String RESTAURANT_UPDATED_ADDED_EXTRA = "restaurant_updated_added_extra";
+        String UPDATED = "restaurant_updated";
+        String ADDED = "restaurant_added";
         int REQUEST_IMAGE_CAPTURE = 4451;
-        int COMPRESS_QUALITY = 100;
-
-
     }
 
     public interface GalleryActivityConstants {

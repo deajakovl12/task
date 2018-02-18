@@ -2,10 +2,8 @@ package com.task.task.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -13,12 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.androidadvance.topsnackbar.TSnackbar;
 import com.task.task.R;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.manager.StringManager;
 import com.task.task.ui.base.activities.BaseActivity;
+import com.task.task.utils.SnackBarHelper;
 
 import java.util.List;
 
@@ -36,10 +34,10 @@ import static com.task.task.utils.Constants.HomeActivityConstants.DATA_INFO;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_LOADED_FROM_DB;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_NOT_DOWNLOADED_NO_INTERNET;
 import static com.task.task.utils.Constants.HomeActivityConstants.UPDATE_RESTAURANT_CODE;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.ADDED;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_ADD;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_EDIT;
-import static com.task.task.utils.Constants.SnackBarConstants.ICON_PADDING;
-import static com.task.task.utils.Constants.SnackBarConstants.ICON_SIZE;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_UPDATED_ADDED_EXTRA;
 
 
 public class HomeActivity extends BaseActivity implements HomeView, HomeActivityRecyclerViewAdapter.Listener {
@@ -111,42 +109,32 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     private void showUserInfoAboutData() {
         switch (infoAboutDownloading) {
             case DATA_DOWNLOADED:
-                setUpSnackBar(R.drawable.ic_check_circle_outline,
+                SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
                         stringManager.getString(R.string.data_loaded_and_saved_locally),
                         R.color.snackbar_green);
                 break;
             case DATA_ERROR_DOWNLOADING:
-                setUpSnackBar(R.drawable.ic_alert_circle_outline,
+                SnackBarHelper.setUpSnackBar(this, R.drawable.ic_alert_circle_outline,
                         stringManager.getString(R.string.data_failure_downloading),
                         R.color.snackbar_red);
                 break;
             case DATA_LOADED_FROM_DB:
-                setUpSnackBar(R.drawable.ic_check_circle_outline,
+                SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
                         stringManager.getString(R.string.data_loaded_from_db),
                         R.color.snackbar_green);
                 break;
             case DATA_NOT_DOWNLOADED_NO_INTERNET:
-                setUpSnackBar(R.drawable.ic_alert_circle_outline,
+                SnackBarHelper.setUpSnackBar(this, R.drawable.ic_alert_circle_outline,
                         stringManager.getString(R.string.data_not_downloaded_no_internet),
                         R.color.snackbar_red);
                 break;
             default:
-                setUpSnackBar(R.drawable.ic_check_circle_outline,
+                SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
                         stringManager.getString(R.string.data_loaded_from_db),
                         R.color.snackbar_green);
                 break;
         }
 
-    }
-
-    private void setUpSnackBar(int iconImage, String snackText, int backgroundColor) {
-        TSnackbar snackbar = TSnackbar
-                .make(findViewById(android.R.id.content), snackText, TSnackbar.LENGTH_LONG);
-        snackbar.setActionTextColor(Color.WHITE);
-        snackbar.setIconRight(iconImage, ICON_SIZE);
-        snackbar.setIconPadding(ICON_PADDING);
-        snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, backgroundColor));
-        snackbar.show();
     }
 
     private void setUpToolbar() {
@@ -216,14 +204,24 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
 
     @Override
     public void restaurantDeleted() {
-        Toast.makeText(this, R.string.home_activity_restaurant_deleted, Toast.LENGTH_SHORT).show();
+        SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
+                stringManager.getString(R.string.home_activity_restaurant_deleted),
+                R.color.snackbar_green);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == UPDATE_RESTAURANT_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, R.string.restaurant_details_activity_restaurant_updated, Toast.LENGTH_SHORT).show();
+                if (data.getStringExtra(RESTAURANT_UPDATED_ADDED_EXTRA).equals(ADDED)) {
+                    SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
+                            stringManager.getString(R.string.restaurant_added_successfully),
+                            R.color.snackbar_green);
+                } else {
+                    SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
+                            stringManager.getString(R.string.restaurant_details_activity_restaurant_updated),
+                            R.color.snackbar_green);
+                }
                 presenter.getRestaurants();
             }
         }

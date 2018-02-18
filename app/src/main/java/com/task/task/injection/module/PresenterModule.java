@@ -2,6 +2,7 @@ package com.task.task.injection.module;
 
 import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.data.storage.PreferenceRepository;
+import com.task.task.data.storage.TaskPreferences;
 import com.task.task.domain.usecase.LocalImagesUseCase;
 import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.injection.scope.ForActivity;
@@ -49,8 +50,10 @@ public final class PresenterModule {
     @ForActivity
     @Provides
     RestaurantDetailsAddNewPresenter provideRestaurantDetailsPresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
-                                                                       @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, StringManager stringManager) {
-        return new RestaurantDetailsAddNewPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager);
+                                                                       @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler,
+                                                                       RestaurantUseCase restaurantUseCase, StringManager stringManager,
+                                                                       PreferenceRepository preferenceRepository) {
+        return new RestaurantDetailsAddNewPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager, preferenceRepository);
     }
 
 

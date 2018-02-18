@@ -7,6 +7,8 @@ import com.task.task.data.api.converter.RestaurantsAPIConverterImpl;
 import com.task.task.data.service.NetworkService;
 import com.task.task.data.service.NetworkServiceImpl;
 import com.task.task.data.service.TaskAPI;
+import com.task.task.data.storage.PreferenceRepository;
+import com.task.task.data.storage.TaskPreferences;
 import com.task.task.device.ApplicationInformation;
 import com.task.task.device.DeviceInformation;
 
@@ -50,8 +52,8 @@ public final class ApiModule {
 
     @Provides
     @Singleton
-    RestaurantsAPIConverter providePersonAPIConverter() {
-        return new RestaurantsAPIConverterImpl();
+    RestaurantsAPIConverter providePersonAPIConverter(final PreferenceRepository preferenceRepository) {
+        return new RestaurantsAPIConverterImpl(preferenceRepository);
     }
 
 

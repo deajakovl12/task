@@ -10,4 +10,9 @@ public interface RestaurantDetailsAddNewPresenter {
     void updateRestaurantData(RestaurantInfo restaurantInfo);
 
     void dispose();
+
+    void addNewRestaurant(RestaurantInfo restaurantInfo);
+
+    int getLastRestaurantId();
+
 }

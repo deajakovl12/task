@@ -6,6 +6,7 @@ import com.task.task.domain.model.RestaurantInfo;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
@@ -21,4 +22,5 @@ public interface RestaurantUseCase {
 
     Observable<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo);
 
+    Completable addNewRestaurant(RestaurantInfo restaurantInfo);
 }

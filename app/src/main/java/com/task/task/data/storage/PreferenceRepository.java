@@ -6,4 +6,8 @@ public interface PreferenceRepository {
 
     boolean getDataDownloaded();
 
+    void setLastRestaurantId(int restaurantId);
+
+    int getLastRestaurantId();
+
 }

@@ -1,16 +1,21 @@
 package com.task.task.ui.details;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.FileProvider;
 import android.view.Menu;
@@ -18,26 +23,39 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.task.task.R;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
+import com.task.task.manager.StringManager;
 import com.task.task.ui.base.activities.BaseActivity;
+import com.task.task.utils.LocationHelper;
+import com.task.task.utils.SnackBarHelper;
 
 import java.io.File;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -46,14 +64,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.ADDED;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_CODE;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.PICK_GALLERY_IMAGE_EXTRA;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.REQUEST_IMAGE_CAPTURE;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_ADD_OR_EDIT;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_DETAILS_INFO;
 import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_EDIT;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.RESTAURANT_UPDATED_ADDED_EXTRA;
+import static com.task.task.utils.Constants.RestaurantDetailsActivityConstants.UPDATED;
 
-public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implements RestaurantDetailsAddNewView {
+public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implements RestaurantDetailsAddNewView,
+        OnSuccessListener<Void>, OnFailureListener {
 
 
     @Inject
@@ -61,6 +83,9 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
 
     @Inject
     RestaurantDetailsAddNewRouter router;
+
+    @Inject
+    StringManager stringManager;
 
     RestaurantInfo restaurantInfo;
 
@@ -85,6 +110,10 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
     private Uri imageUri;
     private File photoFile = null;
     private String addOrEdit;
+
+    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationCallback mLocationCallback;
+    private LocationRequest mLocationRequest;
 
     public static Intent createIntent(final Context context, final RestaurantInfo restaurantInfo, final String addOrEdit) {
         return new Intent(context, RestaurantDetailsAddNewAddNewActivity.class).putExtra(RESTAURANT_DETAILS_INFO, restaurantInfo).putExtra(RESTAURANT_ADD_OR_EDIT, addOrEdit);
@@ -124,13 +153,24 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_restaurant_details_save:
+                restaurantInfo.name = restauantName.getText().toString();
+                restaurantInfo.address = restaurantAddress.getText().toString();
+                restaurantInfo.imageUri = imageUri;
                 if (addOrEdit.equals(RESTAURANT_EDIT)) {
-                    restaurantInfo.name = restauantName.getText().toString();
-                    restaurantInfo.address = restaurantAddress.getText().toString();
-                    restaurantInfo.imageUri = imageUri;
                     presenter.updateRestaurantData(restaurantInfo);
                 } else {
-                    Toast.makeText(this, "ADD new", Toast.LENGTH_SHORT).show();
+                    if (restaurantInfo.name.isEmpty() ||
+                            restaurantInfo.address.isEmpty() ||
+                            restaurantLatitude.getText().toString().isEmpty() ||
+                            restaurantLongitude.getText().toString().isEmpty()) {
+                        SnackBarHelper.setUpSnackBar(this, R.drawable.ic_alert_circle_outline,
+                                stringManager.getString(R.string.enter_all_information_about_restaurant),
+                                R.color.snackbar_red);
+                    } else {
+                        restaurantInfo.latitude = Float.parseFloat(restaurantLatitude.getText().toString());
+                        restaurantInfo.longitude = Float.parseFloat(restaurantLongitude.getText().toString());
+                        presenter.addNewRestaurant(restaurantInfo);
+                    }
                 }
                 break;
             case android.R.id.home:
@@ -153,7 +193,6 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
             if (resultCode == RESULT_OK) {
                 imageUri = Uri.parse(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA));
                 setUpImage(imageUri);
-
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -211,12 +250,17 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
                         restaurantInfo = getIntent().getParcelableExtra(RESTAURANT_DETAILS_INFO);
                         addOrEdit = getIntent().getStringExtra(RESTAURANT_ADD_OR_EDIT);
 
+                        restauantName.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                        restaurantAddress.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                        restauantName.setSingleLine();
+                        restaurantAddress.setSingleLine();
+
                         setUpToolbar();
                         if (addOrEdit.equals(RESTAURANT_EDIT)) {
                             imageUri = restaurantInfo.imageUri;
                             showDataToUser();
                         } else {
-                            //TODO DOHVATI LOKACIJU
+                            checkLocationPermission();
                         }
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                     }
@@ -232,6 +276,51 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
                         token.continuePermissionRequest();
                     }
                 }).check();
+
+    }
+
+    private void checkLocationPermission() {
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION)
+                .withListener(new MultiplePermissionsListener() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        if (report.areAllPermissionsGranted()) {
+
+                            restaurantInfo.id = presenter.getLastRestaurantId() + 1;
+
+                            mLocationCallback = new LocationCallback() {
+                                @Override
+                                public void onLocationResult(LocationResult locationResult) {
+                                    super.onLocationResult(locationResult);
+
+                                    restaurantLatitude.setText(String.valueOf(locationResult.getLastLocation().getLatitude()));
+                                    restaurantLongitude.setText(String.valueOf(locationResult.getLastLocation().getLongitude()));
+                                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                                }
+                            };
+                            mLocationRequest = LocationHelper.createLocationRequest();
+                            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(RestaurantDetailsAddNewAddNewActivity.this);
+
+                            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null).addOnSuccessListener(RestaurantDetailsAddNewAddNewActivity.this).addOnFailureListener(RestaurantDetailsAddNewAddNewActivity.this);
+
+                        }
+
+                        if (!report.getDeniedPermissionResponses().isEmpty()) {
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .onSameThread()
+                .check();
 
     }
 
@@ -287,10 +376,38 @@ public class RestaurantDetailsAddNewAddNewActivity extends BaseActivity implemen
                 .into(restaurantImage);
     }
 
+    public void isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.gps_not_found_title);
+            builder.setMessage(R.string.gps_not_found_message);
+            builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+            builder.setNegativeButton(R.string.no, null);
+            builder.create().show();
+            return;
+        }
+    }
+
     @Override
     public void restaurantDataUpdated() {
-        setResult(Activity.RESULT_OK);
+        setResult(Activity.RESULT_OK, new Intent().putExtra(RESTAURANT_UPDATED_ADDED_EXTRA, UPDATED));
         finish();
     }
 
+    @Override
+    public void onSuccess(Void aVoid) {
+        isLocationEnabled();
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+        Timber.e(e.getMessage());
+    }
+
+    @Override
+    public void restaurantAdded() {
+        setResult(Activity.RESULT_OK, new Intent().putExtra(RESTAURANT_UPDATED_ADDED_EXTRA, ADDED));
+        finish();
+    }
 }

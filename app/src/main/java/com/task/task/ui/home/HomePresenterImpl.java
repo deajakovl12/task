@@ -1,9 +1,6 @@
 package com.task.task.ui.home;
 
-import android.widget.Toast;
-
 import com.task.task.R;
-import com.task.task.data.api.converter.RestaurantsAPIConverter;
 import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.domain.usecase.RestaurantUseCase;
 import com.task.task.manager.StringManager;
@@ -12,7 +9,6 @@ import com.task.task.ui.base.presenter.BasePresenter;
 import java.util.List;
 
 import javax.inject.Named;
-
 
 import io.reactivex.Scheduler;
 import timber.log.Timber;
@@ -51,9 +47,9 @@ public final class HomePresenterImpl extends BasePresenter implements HomePresen
     public void getRestaurants() {
         if (view != null) {
             addDisposable(restaurantUseCase.getLocalRestaurantData()
-                                      .subscribeOn(subscribeScheduler)
-                                      .observeOn(observeScheduler)
-                                      .subscribe(this::onGetRestaurantsSuccess, this::onGetRestauntsFailure));
+                    .subscribeOn(subscribeScheduler)
+                    .observeOn(observeScheduler)
+                    .subscribe(this::onGetRestaurantsSuccess, this::onGetRestauntsFailure));
         }
     }
 
@@ -81,7 +77,7 @@ public final class HomePresenterImpl extends BasePresenter implements HomePresen
     }
 
     private void onDeleteRestaurantSuccess(Boolean success) {
-        if(success && view != null){
+        if (success && view != null) {
             view.restaurantDeleted();
         }
     }

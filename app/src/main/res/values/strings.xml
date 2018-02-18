@@ -30,5 +30,11 @@
     <string name="permission_not_granted">Not granted</string>
     <string name="home_activity_restaurant_deleted">Restaurant deleted</string>
     <string name="restaurant_details_activity_restaurant_updated">Restaurant updated</string>
+    <string name="gps_not_found_title">Enable GPS</string>
+    <string name="gps_not_found_message">GPS is not enabled. Enable GPS?</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="enter_all_information_about_restaurant">You must enter all information about restaurant except image!</string>
+    <string name="restaurant_added_successfully">Restaurant added successfully</string>
 
 </resources>

@@ -2,18 +2,12 @@ package com.task.task.ui.splash;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
 import com.task.task.R;
-import com.task.task.domain.model.RestaurantInfo;
 import com.task.task.injection.component.ActivityComponent;
 import com.task.task.ui.base.activities.BaseActivity;
 
-import java.util.List;
-
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 
 public class SplashActivity extends BaseActivity implements SplashView {

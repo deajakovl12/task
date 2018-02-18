@@ -2,6 +2,7 @@ package com.task.task.injection.module;
 
 import android.provider.Settings;
 
+import com.google.android.gms.tasks.Task;
 import com.task.task.application.TaskApplication;
 import com.task.task.data.storage.PreferenceRepository;
 import com.task.task.data.storage.SecureSharedPreferences;
@@ -44,7 +45,7 @@ public final class DataModule {
 
     @Provides
     @Singleton
-    DatabaseHelper provideDatabaseHelper(final TaskApplication application) {
-        return new DatabaseHelperImpl(application, DATABASE_NAME, DATABASE_VERSION);
+    DatabaseHelper provideDatabaseHelper(final TaskApplication application, final PreferenceRepository preferenceRepository) {
+        return new DatabaseHelperImpl(application, DATABASE_NAME, DATABASE_VERSION, preferenceRepository);
     }
 }
