@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 
 public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelper {
@@ -116,5 +117,24 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
             return Observable.just(true);
         });
 
+    }
+
+    @Override
+    public ObservableSource<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo) {
+        return Observable.defer(() -> {
+            try {
+                ContentValues values = new ContentValues();
+                SQLiteDatabase db = getReadableDatabase();
+                values.put(RestaurantContract.RestaurantEntry.RESTAURANT_NAME, restaurantInfo.name);
+                values.put(RestaurantContract.RestaurantEntry.RESTAURANT_ADDRESS, restaurantInfo.address);
+                values.put(RestaurantContract.RestaurantEntry.RESTAURANT_URI, String.valueOf(restaurantInfo.imageUri));
+                String selection = RestaurantContract.RestaurantEntry.RESTAURANT_ID + "=?";
+                String[] selectionArgs = {String.valueOf(restaurantInfo.id)};
+                db.update(RestaurantContract.RestaurantEntry.TABLE_NAME, values, selection, selectionArgs);
+            } catch (Exception e) {
+                return Observable.just(false);
+            }
+            return Observable.just(true);
+        });
     }
 }

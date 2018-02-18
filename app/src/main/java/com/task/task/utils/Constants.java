@@ -11,6 +11,8 @@ public class Constants {
         String DATA_LOADED_FROM_DB = "data_loaded_from_db";
         String DATA_NOT_DOWNLOADED_NO_INTERNET = "no_internet";
         String DATA_ERROR_DOWNLOADING = "data_error_downloading";
+
+        int UPDATE_RESTAURANT_CODE = 48484;
     }
 
     public interface SnackBarConstants {
@@ -22,7 +24,6 @@ public class Constants {
         String RESTAURANT_DETAILS_INFO = "restaurant_details_info";
         int PICK_GALLERY_IMAGE_CODE = 21414;
         String PICK_GALLERY_IMAGE_EXTRA = "image_uri_extra";
-
     }
 
     public interface GalleryActivityConstants {

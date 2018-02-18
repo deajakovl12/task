@@ -5,21 +5,21 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class RestaurantInfo implements Parcelable{
+public class RestaurantInfo implements Parcelable {
 
-    public static final RestaurantInfo EMPTY = new RestaurantInfo("","", 0, 0, Uri.EMPTY, 0);
+    public static final RestaurantInfo EMPTY = new RestaurantInfo("", "", 0, 0, Uri.EMPTY, 0);
 
-    public final String name;
+    public String name;
 
-    public final String address;
+    public String address;
 
-    public final float longitude;
+    public float longitude;
 
-    public final float latitude;
+    public float latitude;
 
-    public final Uri imageUri;
+    public Uri imageUri;
 
-    public final int id;
+    public int id;
 
 
     public RestaurantInfo(String name, String address, float longitude, float latitude, Uri imageUri, int id) {

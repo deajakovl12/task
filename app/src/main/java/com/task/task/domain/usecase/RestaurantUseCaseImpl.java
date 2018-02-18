@@ -53,6 +53,6 @@ public class RestaurantUseCaseImpl implements RestaurantUseCase {
 
     @Override
     public Observable<Boolean> updateRestaurantData(RestaurantInfo restaurantInfo) {
-        return null;
+        return Observable.defer(() -> databaseHelper.updateRestaurantData(restaurantInfo));
     }
 }

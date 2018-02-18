@@ -62,6 +62,7 @@ public class HomeActivityRecyclerViewAdapter extends RecyclerView.Adapter<HomeAc
     }
 
     public void setData(final List<RestaurantInfo> data) {
+        restaurantInfoList.clear();
         restaurantInfoList.addAll(data);
         notifyDataSetChanged();
     }

@@ -1,9 +1,11 @@
 package com.task.task.ui.details;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -71,6 +73,7 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     @BindView(R.id.activity_restaurant_details_latitude)
     TextView restaurantLatitude;
 
+    private Uri imageUri;
 
     public static Intent createIntent(final Context context, final RestaurantInfo restaurantInfo) {
         return new Intent(context, RestaurantDetailsActivity.class).putExtra(RESTAURANT_DETAILS_INFO, restaurantInfo);
@@ -85,6 +88,7 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         setUpToolbar();
 
         restaurantInfo = getIntent().getParcelableExtra(RESTAURANT_DETAILS_INFO);
+        imageUri = restaurantInfo.imageUri;
         showDataToUser();
     }
 
@@ -93,7 +97,6 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     protected void onResume() {
         super.onResume();
         presenter.setView(this);
-        presenter.getRestaurants();
     }
 
     @Override
@@ -113,7 +116,13 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.activity_restaurant_details_save:
-                Toast.makeText(this, "save", Toast.LENGTH_SHORT).show();
+                restaurantInfo.name = restauantName.getText().toString();
+                restaurantInfo.address = restaurantAddress.getText().toString();
+                restaurantInfo.imageUri = imageUri;
+                presenter.updateRestaurantData(restaurantInfo);
+                break;
+            case android.R.id.home:
+                onBackPressed();
                 break;
             default:
                 break;
@@ -126,14 +135,12 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         activityComponent.inject(this);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_GALLERY_IMAGE_CODE) {
             if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA);
-                Glide.with(this).load(result).centerCrop().into(restaurantImage);
-
+                imageUri = Uri.parse(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA));
+                Glide.with(this).load(data.getStringExtra(PICK_GALLERY_IMAGE_EXTRA)).centerCrop().into(restaurantImage);
             }
         }
     }
@@ -231,5 +238,13 @@ public class RestaurantDetailsActivity extends BaseActivity implements Restauran
         restaurantAddress.setText(restaurantInfo.address);
         restaurantLongitude.setText(String.valueOf(restaurantInfo.longitude));
         restaurantLatitude.setText(String.valueOf(restaurantInfo.latitude));
+        Glide.with(this).load(String.valueOf(restaurantInfo.imageUri)).centerCrop().into(restaurantImage);
     }
+
+    @Override
+    public void restaurantDataUpdated() {
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
 }

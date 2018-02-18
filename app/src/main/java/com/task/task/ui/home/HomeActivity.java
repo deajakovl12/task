@@ -35,6 +35,7 @@ import static com.task.task.utils.Constants.HomeActivityConstants.DATA_ERROR_DOW
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_INFO;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_LOADED_FROM_DB;
 import static com.task.task.utils.Constants.HomeActivityConstants.DATA_NOT_DOWNLOADED_NO_INTERNET;
+import static com.task.task.utils.Constants.HomeActivityConstants.UPDATE_RESTAURANT_CODE;
 import static com.task.task.utils.Constants.SnackBarConstants.ICON_PADDING;
 import static com.task.task.utils.Constants.SnackBarConstants.ICON_SIZE;
 
@@ -213,5 +214,15 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     @Override
     public void restaurantDeleted() {
         Toast.makeText(this, R.string.home_activity_restaurant_deleted, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == UPDATE_RESTAURANT_CODE) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, R.string.restaurant_details_activity_restaurant_updated, Toast.LENGTH_SHORT).show();
+                presenter.getRestaurants();
+            }
+        }
     }
 }
