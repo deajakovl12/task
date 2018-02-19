@@ -102,6 +102,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     public void showData(List<RestaurantInfo> restaurantInfo) {
         mMap.clear();
+        listOfRestaurants.clear();
         new GetBitmapsAsync(restaurantInfo, getResources(), this).execute();
     }
 
@@ -142,7 +143,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         }
     }
 
-    private static class GetBitmapsAsync extends AsyncTask<Void, Void, List<RestaurantInfo>> {
+    private static class GetBitmapsAsync extends AsyncTask<Void, RestaurantInfo, List<RestaurantInfo>> {
         List<RestaurantInfo> restaurantInfoList = new ArrayList<>();
         Resources resources;
         Context context;
@@ -152,6 +153,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
             this.resources = resources;
             this.context = context;
         }
+
 
         @Override
         protected List<RestaurantInfo> doInBackground(Void... voids) {
@@ -192,28 +194,26 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                     } else {
                         restaurant.bitmap = foodMarkerBitmap;
                     }
+
+                    publishProgress(restaurant);
                 }
             }
             return restaurantInfoList;
         }
 
         @Override
-        protected void onPostExecute(List<RestaurantInfo> restaurantInfos) {
-            if (!restaurantInfoList.isEmpty()) {
-                listOfRestaurants.clear();
-                listOfRestaurants.addAll(restaurantInfoList);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-                                restaurantInfoList.get(0).latitude,
-                                restaurantInfoList.get(0).longitude),
-                        9.0f));
+        protected void onProgressUpdate(RestaurantInfo... restaurants) {
+            listOfRestaurants.add(restaurants[0]);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+                            restaurantInfoList.get(0).latitude,
+                            restaurantInfoList.get(0).longitude),
+                    9.0f));
 
-                for (RestaurantInfo restaurant : listOfRestaurants) {
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(restaurant.latitude, restaurant.longitude))
-                            .title(String.valueOf(restaurant.id))
-                            .icon(BitmapDescriptorFactory.fromBitmap(restaurant.bitmap)));
-                }
-            }
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(restaurants[0].latitude, restaurants[0].longitude))
+                    .title(String.valueOf(restaurants[0].id))
+                    .icon(BitmapDescriptorFactory.fromBitmap(restaurants[0].bitmap)));
+
         }
     }
 }

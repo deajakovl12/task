@@ -8,11 +8,8 @@ import com.task.task.data.storage.PreferenceRepository;
 import com.task.task.domain.model.RestaurantInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import timber.log.Timber;
 
 
 public class RestaurantsAPIConverterImpl implements RestaurantsAPIConverter {
@@ -29,7 +26,9 @@ public class RestaurantsAPIConverterImpl implements RestaurantsAPIConverter {
         List<RestaurantInfo> restaurantInfoList = new ArrayList<>(restaurantsApiResponse.size());
 
         int id = preferenceRepository.getLastRestaurantId();
-        Timber.e(String.valueOf(id));
+
+        Collections.reverse(restaurantsApiResponse);
+
         for (RestaurantsApiResponse apiResponse : restaurantsApiResponse) {
             if (apiResponse == null) {
                 restaurantInfoList.add(RestaurantInfo.EMPTY);
@@ -43,6 +42,7 @@ public class RestaurantsAPIConverterImpl implements RestaurantsAPIConverter {
                         restaurantInfoList.size() + 1 + id));
             }
         }
+
         return restaurantInfoList;
     }
 }

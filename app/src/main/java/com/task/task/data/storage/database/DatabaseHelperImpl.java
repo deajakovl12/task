@@ -12,6 +12,7 @@ import com.task.task.data.storage.PreferenceRepository;
 import com.task.task.domain.model.RestaurantInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -103,6 +104,7 @@ public class DatabaseHelperImpl extends SQLiteOpenHelper implements DatabaseHelp
                 restaurantInfoList.add(restaurantInfo);
             }
             cursor.close();
+            Collections.reverse(restaurantInfoList);
             return Single.just(restaurantInfoList);
         });
     }
