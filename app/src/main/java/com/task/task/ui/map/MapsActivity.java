@@ -2,7 +2,10 @@ package com.task.task.ui.map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -32,6 +35,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 import static com.task.task.utils.Constants.HomeActivityConstants.UPDATE_RESTAURANT_CODE;
+import static com.task.task.utils.Constants.MapActivityConstants.CACHE;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, MapsView, GoogleMap.OnMarkerClickListener {
 
@@ -45,9 +49,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Inject
     MapsRouter router;
 
-    private GoogleMap mMap;
+    private static GoogleMap mMap;
 
-    List<RestaurantInfo> listOfRestaurants = new ArrayList<>();
+    static List<RestaurantInfo> listOfRestaurants = new ArrayList<>();
 
     public static Intent createIntent(final Context context) {
         return new Intent(context, MapsActivity.class);
@@ -98,36 +102,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     public void showData(List<RestaurantInfo> restaurantInfo) {
         mMap.clear();
-
-
-        if (!restaurantInfo.isEmpty()) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(restaurantInfo.get(0).latitude, restaurantInfo.get(0).longitude), 9.0f));
-            listOfRestaurants.addAll(restaurantInfo);
-            for (RestaurantInfo restaurant : restaurantInfo) {
-                Bitmap markerBitmap = null;
-                if (restaurant.imageUri != null) {
-                    try {
-                        markerBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), restaurant.imageUri);
-                        markerBitmap = BitmapUtils.scaleBitmap(markerBitmap, 70, 70);
-
-                    } catch (IOException e) {
-                        Timber.e(e.getMessage());
-                    }
-
-                }
-
-                if (markerBitmap != null) {
-                    mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(restaurant.latitude, restaurant.longitude))
-                            .title(String.valueOf(restaurant.id))
-                            .icon(BitmapDescriptorFactory.fromBitmap(markerBitmap)));
-                }else{
-
-                }
-//                mMap.addMarker(new MarkerOptions().position(new LatLng(restaurant.latitude, restaurant.longitude)).title(String.valueOf(restaurant.id)));
-//            mMap.addMarker(new MarkerOptions().position(new LatLng(restaurant.latitude, restaurant.longitude)).title(String.valueOf(restaurant.id)).icon(BitmapDescriptorFactory.fromResource(R.drawable.image_place_holder)));
-            }
-        }
+        new GetBitmapsAsync(restaurantInfo, getResources(), this).execute();
     }
 
 
@@ -158,12 +133,86 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == UPDATE_RESTAURANT_CODE) {
             if (resultCode == RESULT_OK) {
-
                 SnackBarHelper.setUpSnackBar(this, R.drawable.ic_check_circle_outline,
                         stringManager.getString(R.string.restaurant_details_activity_restaurant_updated),
                         R.color.snackbar_green);
 
                 presenter.getRestaurants();
+            }
+        }
+    }
+
+    private static class GetBitmapsAsync extends AsyncTask<Void, Void, List<RestaurantInfo>> {
+        List<RestaurantInfo> restaurantInfoList = new ArrayList<>();
+        Resources resources;
+        Context context;
+
+        GetBitmapsAsync(List<RestaurantInfo> restaurantInfoList, Resources resources, Context context) {
+            this.restaurantInfoList = restaurantInfoList;
+            this.resources = resources;
+            this.context = context;
+        }
+
+        @Override
+        protected List<RestaurantInfo> doInBackground(Void... voids) {
+            Bitmap foodMarkerBitmap = BitmapFactory.decodeResource(resources, R.drawable.food);
+            foodMarkerBitmap = BitmapUtils.scaleBitmap(foodMarkerBitmap, 75, 75);
+
+            if (!restaurantInfoList.isEmpty()) {
+                for (RestaurantInfo restaurant : restaurantInfoList) {
+
+                    Bitmap markerBitmapGallery = null;
+                    Bitmap markerBitmapCache = null;
+
+                    if (!String.valueOf(restaurant.imageUri).isEmpty() && !String.valueOf(restaurant.imageUri).equals("null")) {
+                        if (String.valueOf(restaurant.imageUri).contains(CACHE)) {
+                            try {
+                                markerBitmapCache = MediaStore.Images.Media.getBitmap(context.getContentResolver(), restaurant.imageUri);
+                            } catch (IOException e) {
+                                Timber.e(e.getMessage());
+                            }
+
+                            if (markerBitmapCache != null) {
+                                markerBitmapCache = BitmapUtils.scaleBitmap(markerBitmapCache, 75, 75);
+                            }
+                        } else {
+                            markerBitmapGallery = BitmapFactory.decodeFile(String.valueOf(restaurant.imageUri));
+
+                            if (markerBitmapGallery != null) {
+                                markerBitmapGallery = BitmapUtils.scaleBitmap(markerBitmapGallery, 75, 75);
+                            }
+                        }
+
+                    }
+
+                    if (markerBitmapGallery != null) {
+                        restaurant.bitmap = markerBitmapGallery;
+                    } else if (markerBitmapCache != null) {
+                        restaurant.bitmap = markerBitmapCache;
+                    } else {
+                        restaurant.bitmap = foodMarkerBitmap;
+                    }
+                }
+            }
+            return restaurantInfoList;
+        }
+
+        @Override
+        protected void onPostExecute(List<RestaurantInfo> restaurantInfos) {
+            if (!restaurantInfoList.isEmpty()) {
+                listOfRestaurants.clear();
+                listOfRestaurants.addAll(restaurantInfoList);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+                                restaurantInfoList.get(0).latitude,
+                                restaurantInfoList.get(0).longitude),
+                        9.0f));
+
+                for (RestaurantInfo restaurant : listOfRestaurants) {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(restaurant.latitude, restaurant.longitude))
+                            .title(String.valueOf(restaurant.id))
+                            .icon(BitmapDescriptorFactory.fromBitmap(restaurant.bitmap)));
+                }
             }
         }
     }

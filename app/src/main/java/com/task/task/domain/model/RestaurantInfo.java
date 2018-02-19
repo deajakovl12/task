@@ -1,6 +1,7 @@
 package com.task.task.domain.model;
 
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,6 +21,8 @@ public class RestaurantInfo implements Parcelable {
     public Uri imageUri;
 
     public int id;
+
+    public Bitmap bitmap;
 
 
     public RestaurantInfo(String name, String address, float longitude, float latitude, Uri imageUri, int id) {
@@ -45,6 +48,7 @@ public class RestaurantInfo implements Parcelable {
         dest.writeFloat(this.latitude);
         dest.writeParcelable(this.imageUri, flags);
         dest.writeInt(this.id);
+        dest.writeParcelable(this.bitmap, flags);
     }
 
     protected RestaurantInfo(Parcel in) {
@@ -54,6 +58,7 @@ public class RestaurantInfo implements Parcelable {
         this.latitude = in.readFloat();
         this.imageUri = in.readParcelable(Uri.class.getClassLoader());
         this.id = in.readInt();
+        this.bitmap = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
     public static final Creator<RestaurantInfo> CREATOR = new Creator<RestaurantInfo>() {

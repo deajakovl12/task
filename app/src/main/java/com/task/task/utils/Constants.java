@@ -46,4 +46,8 @@ public class Constants {
         int FOCUSED_PHOTO = 1;
         int NOT_FOCUSED_PHOTO = 2;
     }
+
+    public interface MapActivityConstants {
+        String CACHE = "/cache/";
+    }
 }
