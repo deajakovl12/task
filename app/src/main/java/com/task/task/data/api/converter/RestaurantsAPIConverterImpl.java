@@ -11,10 +11,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.task.task.utils.StringNumberUtils.itOrDefault;
+
 
 public class RestaurantsAPIConverterImpl implements RestaurantsAPIConverter {
 
+    private static final long EMPTY = 0;
+
+    private static final String EMPTY_STRING = "";
+
     PreferenceRepository preferenceRepository;
+
 
     public RestaurantsAPIConverterImpl(PreferenceRepository preferenceRepository) {
         this.preferenceRepository = preferenceRepository;
@@ -22,6 +29,10 @@ public class RestaurantsAPIConverterImpl implements RestaurantsAPIConverter {
 
     @Override
     public List<RestaurantInfo> convertToRestarauntInfo(final List<RestaurantsApiResponse> restaurantsApiResponse) {
+
+        if(restaurantsApiResponse == null){
+            return new ArrayList<>();
+        }
 
         List<RestaurantInfo> restaurantInfoList = new ArrayList<>(restaurantsApiResponse.size());
 
@@ -34,8 +45,8 @@ public class RestaurantsAPIConverterImpl implements RestaurantsAPIConverter {
                 restaurantInfoList.add(RestaurantInfo.EMPTY);
             } else {
                 restaurantInfoList.add(new RestaurantInfo(
-                        apiResponse.name,
-                        apiResponse.address,
+                        itOrDefault(apiResponse.name, EMPTY_STRING),
+                        itOrDefault(apiResponse.address, EMPTY_STRING),
                         apiResponse.longitude,
                         apiResponse.latitude,
                         Uri.EMPTY,

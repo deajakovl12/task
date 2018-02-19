@@ -1,0 +1,38 @@
+[
+  {
+    "Name": "Bufalow Sam",
+    "Address": "193-6569 Ut, St.",
+    "Longitude": 16.00064,
+    "Latitude": 45.80297
+  },
+  {
+    "Name": null,
+    "Address": "9724 Inceptos Ave",
+    "Longitude": 16.05111,
+    "Latitude": 45.83758
+  },
+  {
+    "Name": "Le Croy",
+    "Address": null,
+    "Longitude": 15.9096,
+    "Latitude": 45.8342
+  },
+  {
+    "Name": "Restaurant El Mogote",
+    "Address": "Ap #180-4812 Sed Avenue",
+    "Longitude": null,
+    "Latitude": 45.83816
+  },
+  {
+    "Name": "Pepe's Mexican Food",
+    "Address": "Ap #507-4587 Non Rd.",
+    "Longitude": 16.10129,
+    "Latitude": null
+  },
+  {
+    "Name": null,
+    "Address": null,
+    "Longitude": null,
+    "Latitude": null
+  }
+]
