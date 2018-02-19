@@ -7,6 +7,8 @@ import com.task.task.ui.details.RestaurantDetailsAddNewRouter;
 import com.task.task.ui.details.RestaurantDetailsAddNewRouterImpl;
 import com.task.task.ui.home.HomeRouter;
 import com.task.task.ui.home.HomeRouterImpl;
+import com.task.task.ui.map.MapsRouter;
+import com.task.task.ui.map.MapsRouterImpl;
 import com.task.task.ui.splash.SplashRouter;
 import com.task.task.ui.splash.SplashRouterImpl;
 
@@ -32,6 +34,12 @@ public final class RouterModule {
     @Provides
     RestaurantDetailsAddNewRouter provideRestaurantDetailsRouter(final Activity activity) {
         return new RestaurantDetailsAddNewRouterImpl(activity);
+    }
+
+    @ForActivity
+    @Provides
+    MapsRouter provideMapsRouter(final Activity activity) {
+        return new MapsRouterImpl(activity);
     }
 
 }

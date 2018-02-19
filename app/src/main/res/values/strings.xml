@@ -36,5 +36,7 @@
     <string name="no">no</string>
     <string name="enter_all_information_about_restaurant">You must enter all information about restaurant except image!</string>
     <string name="restaurant_added_successfully">Restaurant added successfully</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="restaurant_map">Map with restaurants</string>
 
 </resources>

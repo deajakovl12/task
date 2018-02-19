@@ -6,4 +6,5 @@ public interface HomeRouter {
 
     void onRestaurantDetailsOrAddNew(RestaurantInfo restaurantInfo, String addOrEdit);
 
+    void onMap();
 }

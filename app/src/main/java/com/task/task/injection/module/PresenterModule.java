@@ -14,6 +14,8 @@ import com.task.task.ui.gallery.GalleryActivityPresenter;
 import com.task.task.ui.gallery.GalleryActivityPresenterImpl;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomePresenterImpl;
+import com.task.task.ui.map.MapsPresenter;
+import com.task.task.ui.map.MapsPresenterImpl;
 import com.task.task.ui.splash.SplashPresenter;
 import com.task.task.ui.splash.SplashPresenterImpl;
 
@@ -64,4 +66,13 @@ public final class PresenterModule {
                                                              StringManager stringManager) {
         return new GalleryActivityPresenterImpl(subscribeScheduler, observeScheduler, stringManager, localImagesUseCase);
     }
+
+
+    @ForActivity
+    @Provides
+    MapsPresenter provideMapsPresenter(@Named(SUBSCRIBE_SCHEDULER) Scheduler subscribeScheduler,
+                                       @Named(OBSERVE_SCHEDULER) Scheduler observeScheduler, RestaurantUseCase restaurantUseCase, StringManager stringManager) {
+        return new MapsPresenterImpl(subscribeScheduler, observeScheduler, restaurantUseCase, stringManager);
+    }
+
 }

@@ -15,6 +15,8 @@ import com.task.task.ui.gallery.GalleryPhotoRecyclerViewAdapter;
 import com.task.task.ui.home.HomeActivityRecyclerViewAdapter;
 import com.task.task.ui.home.HomePresenter;
 import com.task.task.ui.home.HomeRouter;
+import com.task.task.ui.map.MapsPresenter;
+import com.task.task.ui.map.MapsRouter;
 import com.task.task.ui.splash.SplashPresenter;
 import com.task.task.ui.splash.SplashRouter;
 
@@ -74,5 +76,9 @@ public interface ActivityComponent extends ActivityComponentActivityInjects, Act
 
     @Named(HORIZONTAL_LL_MANAGER)
     LinearLayoutManager getLinearLayoutManagerHorizontal();
+
+    MapsPresenter getMapsPresenter();
+
+    MapsRouter getMapsRouter();
 }
 

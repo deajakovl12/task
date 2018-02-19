@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.task.task.R;
 import com.task.task.domain.model.RestaurantInfo;
@@ -160,7 +159,7 @@ public class HomeActivity extends BaseActivity implements HomeView, HomeActivity
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home_activity_google_map:
-                Toast.makeText(this, "map", Toast.LENGTH_SHORT).show();
+                router.onMap();
                 break;
             default:
                 break;
